@@ -15,10 +15,10 @@
         <TextBox x:Name="login" FontSize="20" Height="30" Margin="300,0"/>
         <TextBlock x:Name="passwordText" Text="Wpisz hasło" FontSize="20" Height="30" Width="200" />
         <PasswordBox x:Name="password"  FontSize="20" Height="30" Margin="300,0"/>
-        <TextBlock x:Name="IPtext" Text="Wpisz adres IP" FontSize="20" Width="200"/>
-        <TextBox x:Name="IP" FontSize="20" Height="30" Margin="300,0"/>
-        <Button x:Name="registerButton" Content="Zarejestruj się" Width="200" Padding="10" Margin="300,20" Click="Button_Click"/>
-        <TextBlock x:Name="loginClick" Text="Posiadam już konto" FontSize="15" Width="200" Padding="10" Margin="10" MouseDown="loginClick_MouseDown" />
+        <TextBlock x:Name="passwordText2" Text="Wpisz ponownie hasło" FontSize="20" Width="200"/>
+        <PasswordBox x:Name="password2"  FontSize="20" Height="30" Margin="300,0"/>
+        <Button x:Name="registerButton" Content="Zarejestruj się" Width="200" Padding="10" Margin="300,20" Click="registerButton_Click" />
+        <TextBlock x:Name="loginClick" VerticalAlignment="Center"  Text="Posiadam już konto" FontSize="15" Width="150" Padding="10" Margin="10" MouseDown="loginClick_MouseDown" />
 
 
     </StackPanel>

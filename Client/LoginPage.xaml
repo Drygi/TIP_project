@@ -14,7 +14,7 @@
         <TextBox x:Name="login" FontSize="20" Height="30" Width="200"/>
         <TextBlock x:Name="passwordText" Text="Wpisz hasło" FontSize="20" Height="30" Width="200" />
         <PasswordBox x:Name="password"  FontSize="20" Height="30" Width="200" Margin="300,0"/>
-        <Button x:Name="loginButton" Content="Zaloguj się" Width="200" Padding="10" Margin="300,20" Click="loginButton_Click" />
+        <Button x:Name="loginButton" Content="Zaloguj się" Width="200" Padding="10" Margin="20" Click="loginButton_Click" />
         <TextBlock x:Name="registerClick" Text="Nie posiadam jeszcze konta" FontSize="15"  Width="200" Padding="10" Margin="60" MouseDown="registerClick_MouseDown" />
     </StackPanel>
 </Page>

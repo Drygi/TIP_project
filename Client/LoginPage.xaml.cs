@@ -27,7 +27,8 @@ namespace Client
 
         private void loginButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Uri uri = new Uri("Menu.xaml", UriKind.Relative);
+            this.NavigationService.Navigate(uri);
         }
 
         private void registerClick_MouseDown(object sender, MouseButtonEventArgs e)
