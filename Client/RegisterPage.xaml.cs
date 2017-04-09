@@ -25,5 +25,18 @@ namespace Client
             InitializeComponent();
             
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void loginClick_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+            Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
+            this.NavigationService.Navigate(uri);
+
+        }
     }
 }
