@@ -5,8 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        Title="Logowanie" Height="600" Width="800" Background="#00a1ce">
+    <StackPanel>
+        <TextBlock x:Name="pageText" FontSize="50" Margin="50"  Height="75"  Text="LOGOWANIE" TextAlignment="Center"/>
+        <TextBlock x:Name="loginText" Text="Wpisz login" FontSize="20" Width="200"/>
+        <TextBox x:Name="login" FontSize="20" Height="30" Width="200"/>
+        <TextBlock x:Name="passwordText" Text="Wpisz hasło" FontSize="20" Height="30" Width="200" />
+        <PasswordBox x:Name="password"  FontSize="20" Height="30" Width="200"/>
+        <Button x:Name="loginButton" Content="Zaloguj się" Width="200" Padding="10" Margin="20" Click="loginButton_Click" />
+        <TextBlock x:Name="registerClick" Text="Nie posiadam jeszcze konta" FontSize="15"  Width="200" Padding="10" Margin="60" MouseDown="registerClick_MouseDown" />
+       
+
+
+
+
+    </StackPanel>
 </Window>

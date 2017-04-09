@@ -10,28 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Client
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for RegisterPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class RegisterPage : Window
     {
-        public MainWindow()
+        public RegisterPage()
         {
             InitializeComponent();
-        }
-
-        private void loginButton_Click(object sender, RoutedEventArgs e)
-        {
-           
-        }
-        private void registerClick_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            
         }
     }
 }
