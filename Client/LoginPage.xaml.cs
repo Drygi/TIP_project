@@ -16,13 +16,25 @@ using System.Windows.Shapes;
 namespace Client
 {
     /// <summary>
-    /// Interaction logic for RegisterPage.xaml
+    /// Interaction logic for LoginPage.xaml
     /// </summary>
-    public partial class RegisterPage : Page
+    public partial class LoginPage : Page
     {
-        public RegisterPage()
+        public LoginPage()
         {
             InitializeComponent();
+        }
+
+        private void loginButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void registerClick_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+      
+            Uri uri = new Uri("RegisterPage.xaml", UriKind.Relative);
+            this.NavigationService.Navigate(uri);
             
         }
     }
