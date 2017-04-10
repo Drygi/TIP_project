@@ -27,10 +27,15 @@
         </StackPanel>
         <StackPanel HorizontalAlignment="Center">
             <TextBlock x:Name="loginName" FontSize="30" Text="Zalogowano jako: " Margin="20,50,10,0" TextWrapping="Wrap" />
-
+            <Button x:Name="callButton" Content="Zadzwoń" Height="30" HorizontalAlignment="Right" Margin="0,50,60,0" VerticalAlignment="Top" Width="150" Click="callButton_Click"  />
+            
+            
+            
+            <Button x:Name="callEndButton" Content="Zakończ rozmowę" Height="30" HorizontalAlignment="Right" Margin="0,200,60,0" VerticalAlignment="Top" Width="150"  />
+            
         </StackPanel>
         <StackPanel HorizontalAlignment="Right">
-            <Button x:Name="LogoutButton" Content="Wyloguj się" Height="30" HorizontalAlignment="Right" Margin="0,50,10,0" VerticalAlignment="Top" Width="150" Click="LogoutButton_Click" />
+            <Button x:Name="LogoutButton" Content="Wyloguj się" Height="30" HorizontalAlignment="Right" Margin="0,50,50,50" VerticalAlignment="Top" Width="150" Click="LogoutButton_Click" />
         </StackPanel>
 
      

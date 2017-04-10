@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,19 +22,19 @@ namespace Client
     public partial class Menu : Page
     {
         private List<User> users;
+        private MySqlConnection connection;
         public Menu()
         {
             InitializeComponent();
             loginName.Text += Helper.GlobalMemory._user.login;
-            users = new List<User>();
-            
+            connection = Helper.MySQLHelper.getConnection("server=127.0.0.1;uid=root;password=123abc;database=tipdatabase;");
+            users = new List<User>();       
         }
-
-
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz się wylogować?"))
             {
+                Helper.MySQLHelper.updateStatus(false,Helper.GlobalMemory._user.login, connection);
                 Helper.GlobalMemory._user = null;
                 Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
                 this.NavigationService.Navigate(uri);
@@ -43,17 +44,20 @@ namespace Client
 
         private void onlineUsers_Click(object sender, RoutedEventArgs e)
         {
-            //  generateContact();
-            listBoxItems.ItemsSource = Helper.GlobalHelper.getOnlineAddressesIP();
-            //MessageBox.Show(listBoxItems.SelectedIndex.ToString());
+            Helper.GlobalMemory.users = Helper.MySQLHelper.getOnlineUsers(connection);
+            listBoxItems.ItemsSource = Helper.GlobalMemory.users;   
         }
-        private void generateContact()
+
+        private void callButton_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 10; i++)
+            if (listBoxItems.SelectedIndex == -1)
             {
-                users.Add(new User("Kontakt " + (i + 1).ToString(), "haslo", "ip"));
+                MessageBox.Show("Nie wybrano żadnego użytkownika");
             }
-            listBoxItems.ItemsSource = users;
+            else
+            {
+                MessageBox.Show(Helper.GlobalMemory.users[listBoxItems.SelectedIndex].login);
+            }
         }
     }
 }

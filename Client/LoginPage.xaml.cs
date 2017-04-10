@@ -32,9 +32,10 @@ namespace Client
 
         private void loginButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Helper.MySQLHelper.checkCorrectAccount(login.Text, Helper.GlobalHelper.getMD5(password.ToString()), connection, out user))
+            if (Helper.MySQLHelper.checkCorrectAccount(login.Text, Helper.GlobalHelper.getMD5(password.Password), connection, out user))
             {
                 Helper.GlobalMemory._user = user;
+                Helper.MySQLHelper.updateIPandStatus(user, connection);
                 Uri uri = new Uri("Menu.xaml", UriKind.Relative);
                 this.NavigationService.Navigate(uri);
             }

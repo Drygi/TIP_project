@@ -58,17 +58,6 @@ namespace Client.Helper
             return answer;
         }
 
-        public static List<string> getOnlineAddressesIP()
-        {
-            List<string> addresses = new List<string>();       
-            string myHost = Dns.GetHostName();
-            IPHostEntry myIPs = System.Net.Dns.GetHostEntry(myHost);
-            foreach (IPAddress ip in myIPs.AddressList)
-            {
-                addresses.Add(ip.ToString());       
-            }                   
-            return addresses;
 
-        }
     }
 }

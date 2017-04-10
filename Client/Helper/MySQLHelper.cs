@@ -51,7 +51,7 @@ namespace Client.Helper
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM users WHERE Login=@log;", conn);
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM users WHERE login=@log", conn);
 
                 cmd.Parameters.AddWithValue("@log", login);
 
@@ -79,7 +79,7 @@ namespace Client.Helper
             return returned;
         }
 
-       //sprawdzanie poprawności danych oraz update IP 
+       //sprawdzanie poprawności danych 
         public static bool checkCorrectAccount(string login, string password, MySqlConnection conn, out User user)
         {
             bool returned = true;
@@ -100,10 +100,7 @@ namespace Client.Helper
                     objUser.login = result[1].ToString();
                     objUser.password = result[2].ToString();
                     objUser.ipAddress = GlobalHelper.GetLocalIPAddress();
-                    
-                    MySqlCommand cmd2 = new MySqlCommand("UPDATE users SET ipAddress = @thisPrice WHERE login=@login", conn);
-                    cmd.Parameters.AddWithValue("@ipAddress", objUser.ipAddress);
-                    cmd.Parameters.AddWithValue("@login", login);
+                   
                      returned = true;
         
                 }
@@ -123,6 +120,92 @@ namespace Client.Helper
             }
             user = objUser;
             return returned;
+        }
+
+        public static bool updateIPandStatus(User user, MySqlConnection conn)
+        {
+            bool returned = true;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("UPDATE users SET ipAddress = @ipAddress, online=@online WHERE login=@login", conn);
+                cmd.Parameters.AddWithValue("@ipAddress", user.ipAddress);
+                cmd.Parameters.AddWithValue("@login", user.login);
+                cmd.Parameters.AddWithValue("@online", true);
+                var r = cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                returned = false;
+            }
+            finally
+            {
+
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return returned;
+        }
+
+        public static bool updateStatus(bool status,string login, MySqlConnection conn)
+        {
+            bool returned = true;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("UPDATE users SET online=@online WHERE login=@login", conn);
+                cmd.Parameters.AddWithValue("@online", status);
+                cmd.Parameters.AddWithValue("@login", login);
+                var r = cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                returned = false;
+            }
+            finally
+            {
+
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return returned;
+        }
+
+        public static List<User> getOnlineUsers(MySqlConnection conn)
+        {
+         
+            List<User> users = new List<User>();
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM users WHERE online=@online", conn);
+                cmd.Parameters.AddWithValue("@online", true);
+                var result = cmd.ExecuteReader();
+
+                while (result.Read())
+                {
+                    users.Add(new User(result.GetString(1), result.GetString(2),result.GetString(3)));
+                    
+                }
+
+            }
+            catch (Exception ex)
+            {
+                users = null;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+
+            return users;
         }
     }
 }

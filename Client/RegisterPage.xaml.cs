@@ -38,31 +38,39 @@ namespace Client
         private void registerButton_Click(object sender, RoutedEventArgs e)
         {
 
-            if (Helper.MySQLHelper.findLogin(login.ToString().Trim(), connection))
-            {
-                MessageBox.Show("Podany login już istnieje podaj inny!");
-                login.Clear();
-            }
+            if (login.Text.Length < 5)
+                MessageBox.Show("Podany login jest za krótki. Login musi mieć minimum 5 znaków!");
             else
-            {
-                if (password.ToString().Trim() != password2.ToString().Trim())
+            {  
+                if (Helper.MySQLHelper.findLogin(login.Text, connection))
                 {
-                    MessageBox.Show("Podane hasła różnia się");
+                    MessageBox.Show("Podany login już istnieje podaj inny!");
+                    login.Clear();
                     password.Clear();
-                    password2.Clear();
+                    password2.Clear();               
                 }
                 else
                 {
-                    if (!Helper.MySQLHelper.insertUser(new Client.User(login.Text, Helper.GlobalHelper.getMD5(password.ToString()), Helper.GlobalHelper.GetLocalIPAddress()), connection))
-                        MessageBox.Show("Wstawienie do bazy nie powiodło się");
+                    if (password.ToString().Trim() != password2.ToString().Trim())
+                    {
+                        MessageBox.Show("Podane hasła różnia się");
+                        password.Clear();
+                        password2.Clear();
+                    }
                     else
                     {
-                        MessageBox.Show("Pomyślnie dodano do bazy");
-                        Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
-                        this.NavigationService.Navigate(uri);
+                        if (!Helper.MySQLHelper.insertUser(new Client.User(login.Text, Helper.GlobalHelper.getMD5(password.Password), Helper.GlobalHelper.GetLocalIPAddress()), connection))
+                            MessageBox.Show("Wstawienie do bazy nie powiodło się");
+                        else
+                        {
+                            MessageBox.Show("Pomyślnie dodano do bazy");
+                            Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
+                            this.NavigationService.Navigate(uri);
+                        }
                     }
-                }
-           }
+
+                 }
+            }
         }
 
     }

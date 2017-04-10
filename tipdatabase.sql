@@ -27,8 +27,9 @@ CREATE TABLE `users` (
   `login` varchar(20) NOT NULL,
   `password` varchar(32) NOT NULL,
   `ipAddress` varchar(15) NOT NULL,
+  `online` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +38,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (3,'Drygi','b5e300a157a5e5df56020ba8e689ef40','192.168.1.2');
+INSERT INTO `users` VALUES (10,'Drygi','81dc9bdb52d04dc20036dbd8313ed055','192.168.1.2',0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-10 18:50:23
+-- Dump completed on 2017-04-10 22:58:06

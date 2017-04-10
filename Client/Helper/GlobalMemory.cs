@@ -9,5 +9,6 @@ namespace Client.Helper
     public static class GlobalMemory
     {
         public static User _user { get; set; }
+        public static List<User> users { get; set; }
     }
 }
