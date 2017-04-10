@@ -24,13 +24,28 @@ namespace Client
         public Menu()
         {
             InitializeComponent();
+            loginName.Text += Helper.GlobalMemory._user.login;
             users = new List<User>();
-            generateContact();
+            
         }
 
-        private void callButton_Click(object sender, RoutedEventArgs e)
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(listBoxItems.SelectedIndex.ToString());
+            if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz się wylogować?"))
+            {
+                Helper.GlobalMemory._user = null;
+                Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
+                this.NavigationService.Navigate(uri);
+            }
+            
+        }
+
+        private void onlineUsers_Click(object sender, RoutedEventArgs e)
+        {
+            //  generateContact();
+            listBoxItems.ItemsSource = Helper.GlobalHelper.getOnlineAddressesIP();
+            //MessageBox.Show(listBoxItems.SelectedIndex.ToString());
         }
         private void generateContact()
         {

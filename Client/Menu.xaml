@@ -10,22 +10,32 @@
 
     <DockPanel LastChildFill="True">
         <StackPanel HorizontalAlignment="Left">
-            <TextBlock x:Name="showContact" Text="Kontakty" FontSize="30" Margin="10,50,10,0" />
+            <TextBlock x:Name="showContact" Text="Kontakty online"  FontSize="30" Margin="10,50,10,0" />
 
-            <ListBox x:Name="listBoxItems" Background="#00BFce" HorizontalAlignment="Left" Height="350" Margin="10,10,0,10" VerticalAlignment="Top" Width="130"
+            <ListBox x:Name="listBoxItems" Background="#00BFce" HorizontalAlignment="Left" Height="350" Margin="10,10,0,10" VerticalAlignment="Top" Width="200"
                  ItemsSource="{Binding}">
                 <ListBox.ItemTemplate >
                     <DataTemplate>
                         <StackPanel  Orientation="Horizontal" >
-                            <TextBlock Text="{Binding login}"/>
+                            <TextBlock FontSize="30" Text="{Binding login}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Button x:Name="callButton" Content="Zadzwoń" Width="150" Margin="0,20,0,0" Padding="10" Click="callButton_Click"/>
+            <Button x:Name="onlineUsers" Content="Wyszukaj kontakty online" Width="200" Margin="0,20,0,0" Padding="10" Click="onlineUsers_Click"/>
+    
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center">
+            <TextBlock x:Name="loginName" FontSize="30" Text="Zalogowano jako: " Margin="20,50,10,0" TextWrapping="Wrap" />
 
         </StackPanel>
+        <StackPanel HorizontalAlignment="Right">
+            <Button x:Name="LogoutButton" Content="Wyloguj się" Height="30" HorizontalAlignment="Right" Margin="0,50,10,0" VerticalAlignment="Top" Width="150" Click="LogoutButton_Click" />
+        </StackPanel>
+
+     
         
+
 
 
     </DockPanel>

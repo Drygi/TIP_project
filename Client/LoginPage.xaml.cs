@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,15 +21,29 @@ namespace Client
     /// </summary>
     public partial class LoginPage : Page
     {
+        private MySqlConnection connection;
+        private User user;
         public LoginPage()
         {
             InitializeComponent();
+            connection = Helper.MySQLHelper.getConnection("server=127.0.0.1;uid=root;password=123abc;database=tipdatabase;");
+            user = new User();
         }
 
         private void loginButton_Click(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("Menu.xaml", UriKind.Relative);
-            this.NavigationService.Navigate(uri);
+            if (Helper.MySQLHelper.checkCorrectAccount(login.Text, Helper.GlobalHelper.getMD5(password.ToString()), connection, out user))
+            {
+                Helper.GlobalMemory._user = user;
+                Uri uri = new Uri("Menu.xaml", UriKind.Relative);
+                this.NavigationService.Navigate(uri);
+            }
+            else
+            {
+                MessageBox.Show("Bląd podczas logowania");
+                login.Clear();
+                password.Clear();
+            }
         }
 
         private void registerClick_MouseDown(object sender, MouseButtonEventArgs e)

@@ -1,0 +1,1 @@
+﻿1.1 - dodanie: panelu logowania, rejestracji, menu, połączenie z bazą danych, update IP po zalogowaniu 
