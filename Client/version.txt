@@ -1,3 +1,4 @@
 ﻿1.1 - dodanie: panelu logowania, rejestracji, menu, połączenie z bazą danych, update IP po zalogowaniu 
 1.2 - wyszukiwanie użytkowników online,dodanie pola "online" w bazie danych,  drobne poprawki 
 1.2.1 - zmiana statusu po zamknięciu programu bez wylogoywania, usunięcie zalogowanego użytkownika z kontaków online
+1.2.2 - mala koretka hasla

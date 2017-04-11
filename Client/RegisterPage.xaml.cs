@@ -51,7 +51,7 @@ namespace Client
                 }
                 else
                 {
-                    if (password.ToString().Trim() != password2.ToString().Trim())
+                    if (password.Password.Trim() != password2.Password.Trim())
                     {
                         MessageBox.Show("Podane hasła różnia się");
                         password.Clear();
