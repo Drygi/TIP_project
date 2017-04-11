@@ -44,8 +44,14 @@ namespace Client
 
         private void onlineUsers_Click(object sender, RoutedEventArgs e)
         {
-            Helper.GlobalMemory.users = Helper.MySQLHelper.getOnlineUsers(connection);
-            listBoxItems.ItemsSource = Helper.GlobalMemory.users;   
+           
+            Helper.GlobalMemory.users = Helper.GlobalHelper.removeClientFromUsers(Helper.MySQLHelper.getOnlineUsers(connection), Helper.GlobalMemory._user);
+            if(Helper.GlobalMemory.users.Count == 0)
+                MessageBox.Show("Brak kontaków online");
+            else
+                listBoxItems.ItemsSource = Helper.GlobalMemory.users;
+            
+                
         }
 
         private void callButton_Click(object sender, RoutedEventArgs e)

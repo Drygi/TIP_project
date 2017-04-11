@@ -58,6 +58,14 @@ namespace Client.Helper
             return answer;
         }
 
-
+        public static List<User> removeClientFromUsers(List<User>users,User user)
+        {
+            for (int i = 0; i < users.Count; i++)
+            {
+                if (users[i].login == user.login)                
+                    users.RemoveAt(i);               
+            }       
+            return users;
+        }
     }
 }
