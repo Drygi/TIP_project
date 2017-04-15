@@ -241,6 +241,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\LoginUser.cs" />
     <Compile Include="Helper\MySQLHelpercs.cs" />
     <Compile Include="Helper\RegisterUser.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />

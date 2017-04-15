@@ -54,6 +54,28 @@ namespace Server.Controllers
             return response;
            
         }
+
+        // POST api/logout
+        [Route("logout")]
+        [AllowAnonymous]
+        public IHttpActionResult Logout(RegisterUser user)
+        {
+            if (MySQLHelper.updateStatus(false, user.login, connection))
+                return Ok();
+            else
+                return Unauthorized();
+        }
+
+        //POST api/login
+        [Route("login")]
+        [AllowAnonymous]
+        public IHttpActionResult login(LoginUser user)
+        {
+            if (MySQLHelper.checkCorrectAccount(user.login, user.password, connection) && MySQLHelper.updateIPandStatus(user, connection))  
+                return Ok();         
+            else
+                return Unauthorized();
+        }
     }
 
 }

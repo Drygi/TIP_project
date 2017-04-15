@@ -81,11 +81,10 @@ namespace Helper
             return returned;
         }
 
-  /*      //sprawdzanie poprawności danych 
-        public static bool checkCorrectAccount(string login, string password, MySqlConnection conn, out User user)
+        //sprawdzanie poprawności danych 
+        public static bool checkCorrectAccount(string login, string password, MySqlConnection conn)
         {
             bool returned = true;
-            User objUser = null;
             try
             {
                 conn.Open();
@@ -97,12 +96,6 @@ namespace Helper
                 if (result.HasRows)
                 {
                     result.Read();
-                    objUser = new User();
-                    objUser.ID = Convert.ToInt16(result[0]);
-                    objUser.login = result[1].ToString();
-                    objUser.password = result[2].ToString();
-                    objUser.ipAddress = GlobalHelper.GetLocalIPAddress();
-
                     returned = true;
 
                 }
@@ -120,11 +113,9 @@ namespace Helper
                     conn.Close();
                 }
             }
-            user = objUser;
             return returned;
         }
-*/
-        public static bool updateIPandStatus(User user, MySqlConnection conn)
+        public static bool updateIPandStatus(LoginUser user, MySqlConnection conn)
         {
             bool returned = true;
             try
