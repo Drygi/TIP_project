@@ -5,16 +5,14 @@ using System.Web;
 
 namespace Server.Helper
 {
-    public class RegisterUser
+    public class OnlineUser
     {
         public string login { get; set; }
-        public string password { get; set; }
         public string ipAddress { get; set; }
 
-        public RegisterUser(string login, string password, string ipAddress)
+        public OnlineUser(string login, string ipAddress)
         {
             this.login = login;
-            this.password = password;
             this.ipAddress = ipAddress;
         }
     }

@@ -4,24 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client
+namespace Client.Helper
 {
-    public class User
+    public class OnlineUser
     {
-    //    public int ID { get; set; }
         public string login { get; set; }
-        public string password { get; set; }
         public string ipAddress { get; set; }
-        public bool status { get; set; }
-        public User()        
+        public OnlineUser()
         {
         }
-        public User(string login, string password, string ip,bool status)
+        public OnlineUser(string login, string ipAddress)
         {
             this.login = login;
-            this.password = password;
-            this.ipAddress = ip;
-            this.status = status;
+            this.ipAddress = ipAddress;
         }
         public override string ToString()
         {

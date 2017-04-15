@@ -1,5 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -22,17 +21,16 @@ namespace Client
     /// </summary>
     public partial class MainWindow : NavigationWindow
     {
-        private MySqlConnection connection;
         public MainWindow()
         {
             InitializeComponent();
             this.ShowsNavigationUI = false;
-            connection = Helper.MySQLHelper.getConnection("server=127.0.0.1;uid=root;password=123abc;database=tipdatabase;");
+           
         }
-        private void Window_Closing(object sender, CancelEventArgs e)
+        private async void Window_Closing(object sender, CancelEventArgs e)
         {
             if (Helper.GlobalMemory._user != null)
-                Helper.MySQLHelper.updateStatus(false, Helper.GlobalMemory._user.login, connection);
+                await Helper.APIHelper.logout(Helper.GlobalMemory._user);
         }
 
     }

@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Client.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,36 +22,32 @@ namespace Client
     public partial class Menu : Page
     {
         private List<User> users;
-        private MySqlConnection connection;
         public Menu()
         {
             InitializeComponent();
-            loginName.Text += Helper.GlobalMemory._user.login;
-            connection = Helper.MySQLHelper.getConnection("server=127.0.0.1;uid=root;password=123abc;database=tipdatabase;");
+            loginName.Text += GlobalMemory._user.login; 
             users = new List<User>();       
         }
-        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz się wylogować?"))
             {
-                Helper.MySQLHelper.updateStatus(false,Helper.GlobalMemory._user.login, connection);
-                Helper.GlobalMemory._user = null;
+                await Helper.APIHelper.logout(Helper.GlobalMemory._user);
+                GlobalMemory._user = null;
                 Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
                 this.NavigationService.Navigate(uri);
             }
-            
+
         }
 
-        private void onlineUsers_Click(object sender, RoutedEventArgs e)
+        private async void onlineUsers_Click(object sender, RoutedEventArgs e)
         {
-           
-            Helper.GlobalMemory.users = Helper.GlobalHelper.removeClientFromUsers(Helper.MySQLHelper.getOnlineUsers(connection), Helper.GlobalMemory._user);
-            if(Helper.GlobalMemory.users.Count == 0)
+            GlobalMemory.onlineUsers = await Helper.APIHelper.getOnlineUsers();
+            removeAcutalUserFromList(GlobalMemory._user);
+            if (Helper.GlobalMemory.onlineUsers.Count == 0)
                 MessageBox.Show("Brak kontaków online");
             else
-                listBoxItems.ItemsSource = Helper.GlobalMemory.users;
-            
-                
+                listBoxItems.ItemsSource = Helper.GlobalMemory.onlineUsers;
         }
 
         private void callButton_Click(object sender, RoutedEventArgs e)
@@ -62,7 +58,16 @@ namespace Client
             }
             else
             {
-                MessageBox.Show(Helper.GlobalMemory.users[listBoxItems.SelectedIndex].login);
+                MessageBox.Show(Helper.GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].login);
+            }
+        }
+
+        public void removeAcutalUserFromList(User user)
+        {
+            for (int i = 0; i < Helper.GlobalMemory.onlineUsers.Count; i++)
+            {
+                if (Helper.GlobalMemory.onlineUsers[i].login == user.login)
+                    Helper.GlobalMemory.onlineUsers.RemoveAt(i);
             }
         }
     }

@@ -16,7 +16,7 @@ namespace Helper
             return new MySqlConnection(connectionString);
         }
 
-        public static bool insertUser(RegisterUser user, MySqlConnection conn)
+        public static bool insertUser(User user, MySqlConnection conn)
         {
             bool returned = true;
 
@@ -115,7 +115,7 @@ namespace Helper
             }
             return returned;
         }
-        public static bool updateIPandStatus(LoginUser user, MySqlConnection conn)
+        public static bool updateIPandStatus(User user, MySqlConnection conn)
         {
             bool returned = true;
             try
@@ -168,10 +168,10 @@ namespace Helper
             return returned;
         }
 
-        public static List<User> getOnlineUsers(MySqlConnection conn)
+        public static List<OnlineUser> getOnlineUsers(MySqlConnection conn)
         {
 
-            List<User> users = new List<User>();
+            List<OnlineUser> users = new List<OnlineUser>();
             try
             {
                 conn.Open();
@@ -181,7 +181,7 @@ namespace Helper
 
                 while (result.Read())
                 {
-                    users.Add(new User(result.GetString(1), result.GetString(2), result.GetString(3),result.GetBoolean(4)));
+                    users.Add(new OnlineUser(result.GetString(1), result.GetString(3)));
 
                 }
 

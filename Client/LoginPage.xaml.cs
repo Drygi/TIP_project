@@ -1,7 +1,9 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,21 +23,21 @@ namespace Client
     /// </summary>
     public partial class LoginPage : Page
     {
-        private MySqlConnection connection;
         private User user;
         public LoginPage()
         {
             InitializeComponent();
-            connection = Helper.MySQLHelper.getConnection("server=127.0.0.1;uid=root;password=123abc;database=tipdatabase;");
             user = new User();
         }
 
-        private void loginButton_Click(object sender, RoutedEventArgs e)
+        private async void loginButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Helper.MySQLHelper.checkCorrectAccount(login.Text, Helper.GlobalHelper.getMD5(password.Password), connection, out user))
+            User user = new User(login.Text, Helper.GlobalHelper.getMD5(password.Password), 
+                Helper.GlobalHelper.GetLocalIPAddress(), true);
+
+            if (await Helper.APIHelper.login(user))
             {
                 Helper.GlobalMemory._user = user;
-                Helper.MySQLHelper.updateIPandStatus(user, connection);
                 Uri uri = new Uri("Menu.xaml", UriKind.Relative);
                 this.NavigationService.Navigate(uri);
             }
@@ -45,6 +47,7 @@ namespace Client
                 login.Clear();
                 password.Clear();
             }
+
         }
 
         private void registerClick_MouseDown(object sender, MouseButtonEventArgs e)

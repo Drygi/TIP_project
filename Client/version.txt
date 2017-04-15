@@ -2,3 +2,4 @@
 1.2 - wyszukiwanie użytkowników online,dodanie pola "online" w bazie danych,  drobne poprawki 
 1.2.1 - zmiana statusu po zamknięciu programu bez wylogoywania, usunięcie zalogowanego użytkownika z kontaków online
 1.2.2 - mala koretka hasla
+1.3 - usunięcie klasy MySQLHelper, utworzenie klasy APIHelper, która wysyła GET'y POST'y od serwera,który łączy się z bazą + zmiana obsługi logowania/rejestracji itp, dodanie klasy OnlineUser

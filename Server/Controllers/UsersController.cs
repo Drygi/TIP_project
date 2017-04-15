@@ -20,36 +20,40 @@ namespace Server.Controllers
     public class UsersController : ApiController
     {
         MySqlConnection connection = MySQLHelper.getConnection("server=127.0.0.1;uid=root;password=123abc;database=tipdatabase;");
+      
         // GET api/users
         [Route("users")]
         public List<Dictionary<String, object>> GetUsers()
         {
-            UserManager users = new UserManager();
+            List<OnlineUser> users = MySQLHelper.getOnlineUsers(connection);
             List<Dictionary<String, object>> results = new List<Dictionary<string, object>>();
-          foreach (User user in users.users)
+
+            foreach (var user in users)
             {
                 Dictionary<string, object> result = new Dictionary<string, object>
             {
                 { "login", user.login },
                 { "ipAddress", user.ipAddress},
-                { "status", user.Status }
             };
                 results.Add(result);
             }
 
             return results;
         }
-
+       
         // POST api/register
         [AllowAnonymous]
         [Route("register")]     
-        public IHttpActionResult Register(RegisterUser userModel)
+        public IHttpActionResult Register(User userModel)
         {
-            var responseDict = new Dictionary<string, RegisterUser>();
+            var responseDict = new Dictionary<string, User>();
             HttpResponseMessage responseMsg = Request.CreateResponse
                 (HttpStatusCode.OK, responseDict, new MediaTypeHeaderValue("application/json"));    
             IHttpActionResult response = ResponseMessage(responseMsg);
-            MySQLHelper.insertUser(userModel, connection);
+            if (MySQLHelper.findLogin(userModel.login, connection))
+                return Unauthorized();
+            else
+                 MySQLHelper.insertUser(userModel, connection);
             
             return response;
            
@@ -58,7 +62,7 @@ namespace Server.Controllers
         // POST api/logout
         [Route("logout")]
         [AllowAnonymous]
-        public IHttpActionResult Logout(RegisterUser user)
+        public IHttpActionResult Logout(User user)
         {
             if (MySQLHelper.updateStatus(false, user.login, connection))
                 return Ok();
@@ -66,10 +70,22 @@ namespace Server.Controllers
                 return Unauthorized();
         }
 
+        // POST api/findLogin
+        [Route("findLogin")]
+        [AllowAnonymous]
+        public IHttpActionResult findLoign(OnlineUser user)
+        {
+            if (MySQLHelper.findLogin(user.login,connection))
+                return Ok();
+            else
+                return Unauthorized();
+        }
+
+
         //POST api/login
         [Route("login")]
         [AllowAnonymous]
-        public IHttpActionResult login(LoginUser user)
+        public IHttpActionResult login(User user)
         {
             if (MySQLHelper.checkCorrectAccount(user.login, user.password, connection) && MySQLHelper.updateIPandStatus(user, connection))  
                 return Ok();         

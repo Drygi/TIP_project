@@ -7,11 +7,10 @@ namespace Server.Views
 {
     public class User
     {
-        public int ID { get; set; }
         public string login { get; set; }
         public string password { get; set; }
         public string ipAddress { get; set; }
-        public bool Status { get; set; }
+        public bool status { get; set; }
 
         public User()
         {
@@ -22,7 +21,7 @@ namespace Server.Views
             this.login = login;
             this.password = password;
             this.ipAddress = IP;
-            this.Status = status;
+            this.status = status;
         }
         
 }

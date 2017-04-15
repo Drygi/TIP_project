@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MySql.Data.MySqlClient;
+using Client.Helper;
 
 namespace Client
 {
@@ -21,13 +21,9 @@ namespace Client
     /// </summary>
     public partial class RegisterPage : Page
     {
-        private MySqlConnection connection;
         public RegisterPage()
         {
-            InitializeComponent();
-            connection = Helper.MySQLHelper.getConnection("server=127.0.0.1;uid=root;password=123abc;database=tipdatabase;");
-            
-
+            InitializeComponent();    
         }
         private void loginClick_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -35,14 +31,17 @@ namespace Client
             this.NavigationService.Navigate(uri);
         }
 
-        private void registerButton_Click(object sender, RoutedEventArgs e)
+        private async void registerButton_Click(object sender, RoutedEventArgs e)
         {
-
+            var s = new OnlineUser();
             if (login.Text.Length < 5)
                 MessageBox.Show("Podany login jest za krótki. Login musi mieć minimum 5 znaków!");
             else
-            {  
-                if (Helper.MySQLHelper.findLogin(login.Text, connection))
+            {
+                s.login = login.Text;
+                s.ipAddress = " ";
+
+                if (!await Helper.APIHelper.findLogin(s))
                 {
                     MessageBox.Show("Podany login już istnieje podaj inny!");
                     login.Clear();
@@ -59,7 +58,8 @@ namespace Client
                     }
                     else
                     {
-                        if (!Helper.MySQLHelper.insertUser(new Client.User(login.Text, Helper.GlobalHelper.getMD5(password.Password), Helper.GlobalHelper.GetLocalIPAddress()), connection))
+                        var user = new User(login.Text, Helper.GlobalHelper.getMD5(password.Password), Helper.GlobalHelper.GetLocalIPAddress(), false);
+                        if (!await Helper.APIHelper.register(user))
                             MessageBox.Show("Wstawienie do bazy nie powiodło się");
                         else
                         {
