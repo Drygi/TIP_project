@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Client"
         Closing="Window_Closing"    
         mc:Ignorable="d"
-        Title="VoIP application" Height="600" Width="800" Background="#00a1ce" Source="LoginPage.xaml" >
+        Title="VoIP application" Height="600" Width="800" Background="#e4b5a0" Source="LoginPage.xaml" >
     
 </NavigationWindow >
     

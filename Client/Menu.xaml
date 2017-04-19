@@ -5,14 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Client"
       mc:Ignorable="d" 
-      Height="600" Width="800" Background="#00a1ce" 
+      Height="600" Width="800" Background="#3f3753" 
       Title="Menu">
 
     <DockPanel LastChildFill="True">
         <StackPanel HorizontalAlignment="Left">
             <TextBlock x:Name="showContact" Text="Kontakty online"  FontSize="30" Margin="10,50,10,0" />
 
-            <ListBox x:Name="listBoxItems" Background="#00BFce" HorizontalAlignment="Left" Height="350" Margin="10,10,0,10" VerticalAlignment="Top" Width="200"
+            <ListBox x:Name="listBoxItems" Background="#4d577a" HorizontalAlignment="Left" Height="350" Margin="10,10,0,10" VerticalAlignment="Top" Width="200"
                  ItemsSource="{Binding}">
                 <ListBox.ItemTemplate >
                     <DataTemplate>
