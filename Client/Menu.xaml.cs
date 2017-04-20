@@ -32,10 +32,14 @@ namespace Client
         {
             if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz się wylogować?"))
             {
-                await Helper.APIHelper.logout(Helper.GlobalMemory._user);
-                GlobalMemory._user = null;
-                Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
-                this.NavigationService.Navigate(uri);
+                if (await Helper.APIHelper.logout(Helper.GlobalMemory._user))
+                {
+                    GlobalMemory._user = null;
+                    Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
+                    this.NavigationService.Navigate(uri);
+                }
+                else
+                    MessageBox.Show("Coś poszło nie tak");
             }
 
         }
@@ -66,8 +70,25 @@ namespace Client
         {
             for (int i = 0; i < Helper.GlobalMemory.onlineUsers.Count; i++)
             {
-                if (Helper.GlobalMemory.onlineUsers[i].login == user.login)
+                if (Helper.GlobalMemory.onlineUsers[i].login.ToUpper() == user.login.ToUpper())
                     Helper.GlobalMemory.onlineUsers.RemoveAt(i);
+            }
+        }
+
+        private async void deleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz usunąć swoje konto?"))
+            {
+                
+                if (await Helper.APIHelper.deleteUser(Helper.GlobalMemory._user))
+                {
+                    MessageBox.Show("Konto zostało usunięte pomyślnie");
+                    Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
+                    this.NavigationService.Navigate(uri);
+                    GlobalMemory._user = null;
+                }
+                else
+                    MessageBox.Show("Coś poszło nie tak");
             }
         }
     }

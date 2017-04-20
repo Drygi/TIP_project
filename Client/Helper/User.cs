@@ -8,7 +8,6 @@ namespace Client
 {
     public class User
     {
-    //    public int ID { get; set; }
         public string login { get; set; }
         public string password { get; set; }
         public string ipAddress { get; set; }
@@ -16,11 +15,11 @@ namespace Client
         public User()        
         {
         }
-        public User(string login, string password, string ip,bool status)
+        public User(string login, string password, string ipAddress,bool status)
         {
             this.login = login;
             this.password = password;
-            this.ipAddress = ip;
+            this.ipAddress = ipAddress;
             this.status = status;
         }
         public override string ToString()

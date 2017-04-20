@@ -41,7 +41,7 @@ namespace Client
                 s.login = login.Text;
                 s.ipAddress = " ";
 
-                if (!await Helper.APIHelper.findLogin(s))
+                if (await Helper.APIHelper.findLogin(s))
                 {
                     MessageBox.Show("Podany login już istnieje podaj inny!");
                     login.Clear();

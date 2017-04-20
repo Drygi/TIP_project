@@ -62,7 +62,7 @@ namespace Client.Helper
         {
             for (int i = 0; i < users.Count; i++)
             {
-                if (users[i].login == user.login)                
+                if (users[i].login.ToUpper() == user.login.ToUpper())                
                     users.RemoveAt(i);               
             }       
             return users;

@@ -81,6 +81,17 @@ namespace Server.Controllers
                 return Unauthorized();
         }
 
+        //DELETE api/deleteUser
+        [Route("deleteUser")]
+        [AllowAnonymous]
+        public IHttpActionResult deleteUser(User user)
+        {
+            if (MySQLHelper.deleteUser(user.login, connection))
+                return Ok();
+            else
+                return Unauthorized();
+        }
+
 
         //POST api/login
         [Route("login")]

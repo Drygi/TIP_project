@@ -200,5 +200,42 @@ namespace Helper
 
             return users;
         }
+
+        public static bool deleteUser(string login, MySqlConnection conn)
+        {
+            bool returned = true;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM users WHERE login=@log", conn);
+
+                cmd.Parameters.AddWithValue("@log", login);
+
+                var result = cmd.ExecuteReader();
+
+                
+
+                if (result.RecordsAffected >0)
+                {
+                    returned = true;
+                }
+                else
+                    returned = false;
+
+            }
+            catch (Exception ex)
+            {
+                returned = false;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return returned;
+        }
+
     }
 }

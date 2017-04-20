@@ -16,11 +16,11 @@ namespace Server.Views
         {
         }
     
-    public User(string login,string password, string IP, bool status)
+    public User(string login,string password, string ipAddress, bool status)
         {
             this.login = login;
             this.password = password;
-            this.ipAddress = IP;
+            this.ipAddress = ipAddress;
             this.status = status;
         }
         

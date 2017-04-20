@@ -43,6 +43,24 @@ namespace Client.Helper
                     return false;
             }
         }
+        public static async Task<bool> deleteUser(User user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:11885");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                
+                StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+               
+                // HTTP DELETE
+                HttpResponseMessage response = await client.DeleteAsync("api/deleteUser");
+                if (response.IsSuccessStatusCode)
+                    return true;
+                else
+                    return false;
+            }
+        }
         public static async Task<bool> logout(User user)
         {
             using (var client = new HttpClient())
