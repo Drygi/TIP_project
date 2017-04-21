@@ -21,6 +21,35 @@ namespace Server.Controllers
     {
         MySqlConnection connection = MySQLHelper.getConnection("server=127.0.0.1;uid=root;password=123abc;database=tipdatabase;");
       
+
+        // POST api/user
+        [AllowAnonymous]
+        [Route("user")]     
+        public IHttpActionResult Register(User userModel)
+        {
+            var responseDict = new Dictionary<string, User>();
+            HttpResponseMessage responseMsg = Request.CreateResponse
+                (HttpStatusCode.OK, responseDict, new MediaTypeHeaderValue("application/json"));    
+            IHttpActionResult response = ResponseMessage(responseMsg);
+            if (MySQLHelper.findLogin(userModel.login, connection))
+                return Unauthorized();
+            else
+                 MySQLHelper.insertUser(userModel, connection);
+            
+            return response;       
+        }
+
+        //GET api/findLogin
+        [Route("findLogin")]
+        [AllowAnonymous]
+        public IHttpActionResult findLoign(OnlineUser user)
+        {
+            if (MySQLHelper.findLogin(user.login, connection))
+                return Ok();
+            else
+                return Unauthorized();
+        }
+
         // GET api/users
         [Route("users")]
         public List<Dictionary<String, object>> GetUsers()
@@ -40,23 +69,17 @@ namespace Server.Controllers
 
             return results;
         }
-       
-        // POST api/register
+
+
+        //DELETE api/user
+        [Route("user/{login}")]
         [AllowAnonymous]
-        [Route("register")]     
-        public IHttpActionResult Register(User userModel)
+        public IHttpActionResult deleteUser(string login)
         {
-            var responseDict = new Dictionary<string, User>();
-            HttpResponseMessage responseMsg = Request.CreateResponse
-                (HttpStatusCode.OK, responseDict, new MediaTypeHeaderValue("application/json"));    
-            IHttpActionResult response = ResponseMessage(responseMsg);
-            if (MySQLHelper.findLogin(userModel.login, connection))
-                return Unauthorized();
+            if (MySQLHelper.deleteUser(login, connection))
+                return Ok();
             else
-                 MySQLHelper.insertUser(userModel, connection);
-            
-            return response;
-           
+                return Unauthorized();
         }
 
         // POST api/logout
@@ -65,28 +88,6 @@ namespace Server.Controllers
         public IHttpActionResult Logout(User user)
         {
             if (MySQLHelper.updateStatus(false, user.login, connection))
-                return Ok();
-            else
-                return Unauthorized();
-        }
-
-        // POST api/findLogin
-        [Route("findLogin")]
-        [AllowAnonymous]
-        public IHttpActionResult findLoign(OnlineUser user)
-        {
-            if (MySQLHelper.findLogin(user.login,connection))
-                return Ok();
-            else
-                return Unauthorized();
-        }
-
-        //DELETE api/deleteUser
-        [Route("deleteUser")]
-        [AllowAnonymous]
-        public IHttpActionResult deleteUser(User user)
-        {
-            if (MySQLHelper.deleteUser(user.login, connection))
                 return Ok();
             else
                 return Unauthorized();

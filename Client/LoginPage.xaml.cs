@@ -28,6 +28,7 @@ namespace Client
         {
             InitializeComponent();
             user = new User();
+          
         }
 
         private async void loginButton_Click(object sender, RoutedEventArgs e)
@@ -57,5 +58,6 @@ namespace Client
             this.NavigationService.Navigate(uri);
             
         }
+    
     }
 }

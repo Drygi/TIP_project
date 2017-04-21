@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -24,8 +25,8 @@ namespace Client
         public MainWindow()
         {
             InitializeComponent();
+            GlobalMemory.serverAddressIP = Microsoft.VisualBasic.Interaction.InputBox("Wpisz adres IP serwera wraz z portem!");
             this.ShowsNavigationUI = false;
-           
         }
         private async void Window_Closing(object sender, CancelEventArgs e)
         {

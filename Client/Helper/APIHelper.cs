@@ -15,7 +15,7 @@ namespace Client.Helper
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:11885");
+                client.BaseAddress = new Uri("http://"+GlobalMemory.serverAddressIP);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
@@ -27,50 +27,18 @@ namespace Client.Helper
                     return false;
             }
         }
-        public static async Task<bool> findLogin(OnlineUser user)
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:11885");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
-                // HTTP POST
-                HttpResponseMessage response = await client.PostAsync("api/findLogin", content);
-                if (response.IsSuccessStatusCode)
-                    return true;
-                else
-                    return false;
-            }
-        }
         public static async Task<bool> deleteUser(User user)
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:11885");
+                client.BaseAddress = new Uri("http://" + GlobalMemory.serverAddressIP);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 
                 StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
                
                 // HTTP DELETE
-                HttpResponseMessage response = await client.DeleteAsync("api/deleteUser");
-                if (response.IsSuccessStatusCode)
-                    return true;
-                else
-                    return false;
-            }
-        }
-        public static async Task<bool> logout(User user)
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:11885");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
-                // HTTP POST
-                HttpResponseMessage response = await client.PostAsync("api/logout", content);
+                HttpResponseMessage response = await client.DeleteAsync("api/user/"+user.login);
                 if (response.IsSuccessStatusCode)
                     return true;
                 else
@@ -81,12 +49,12 @@ namespace Client.Helper
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:11885");
+                client.BaseAddress = new Uri("http://" + GlobalMemory.serverAddressIP);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
                 // HTTP POST
-                HttpResponseMessage response = await client.PostAsync("api/register", content);
+                HttpResponseMessage response = await client.PostAsync("api/user", content);
                 if (response.IsSuccessStatusCode)
                     return true;
                 else
@@ -97,7 +65,7 @@ namespace Client.Helper
         {
             using (var client = new HttpClient())
             {
-                HttpResponseMessage response = await client.GetAsync("http://localhost:11885/api/users/");
+                HttpResponseMessage response = await client.GetAsync("http://" + GlobalMemory.serverAddressIP+"/api/users/");
 
                 response.EnsureSuccessStatusCode();
 
@@ -109,6 +77,39 @@ namespace Client.Helper
 
                 }
 
+            }
+        }
+        public static async Task<bool> logout(User user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://" + GlobalMemory.serverAddressIP);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+                // HTTP POST
+                HttpResponseMessage response = await client.PostAsync("api/logout", content);
+
+               if (response.IsSuccessStatusCode)
+                    return true;
+                else
+                    return false;
+            }
+        }
+        public static async Task<bool> findLogin(OnlineUser user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://" + GlobalMemory.serverAddressIP);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+                // HTTP POST
+                HttpResponseMessage response = await client.PostAsync("api/findLogin", content);
+                if (response.IsSuccessStatusCode)
+                    return true;
+                else
+                    return false;
             }
         }
     }

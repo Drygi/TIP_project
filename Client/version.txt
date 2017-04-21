@@ -4,3 +4,4 @@
 1.2.2 - mala koretka hasla
 1.3 - usunięcie klasy MySQLHelper, utworzenie klasy APIHelper, która wysyła GET'y POST'y od serwera,który łączy się z bazą + zmiana obsługi logowania/rejestracji itp, dodanie klasy OnlineUser
 1.5 - dodanie w deleteUser w api, buttonu usuwającego konto, oraz poprawka porównywania loginów 
+1.5.1 - edycja api, podanie adresu IP serwera na początku uruchomienia aplikacji, 
