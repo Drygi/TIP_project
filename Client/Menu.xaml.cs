@@ -1,8 +1,12 @@
 ﻿using Client.Helper;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,11 +26,13 @@ namespace Client
     public partial class Menu : Page
     {
         private List<User> users;
+        UdpUser client;
         public Menu()
         {
             InitializeComponent();
             loginName.Text += GlobalMemory._user.login; 
-            users = new List<User>();       
+            users = new List<User>();
+            startListening();
         }
         private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
@@ -41,7 +47,6 @@ namespace Client
                 else
                     MessageBox.Show("Coś poszło nie tak");
             }
-
         }
 
         private async void onlineUsers_Click(object sender, RoutedEventArgs e)
@@ -52,17 +57,48 @@ namespace Client
                 MessageBox.Show("Brak kontaków online");
             else
                 listBoxItems.ItemsSource = Helper.GlobalMemory.onlineUsers;
+
         }
 
         private void callButton_Click(object sender, RoutedEventArgs e)
         {
+            if(client==null)
+            {
+                client = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, 32123);
+                Task.Factory.StartNew(async () => {
+                    while (true)
+                    {
+                        try
+                        {
+                            var received = await client.Receive();
+                            listView.Items.Add(received.Sender + " " + received.Message);
+                            if (received.Message.Contains("quit"))
+                                break;
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.ToString());
+                        }
+                    }
+
+                });
+            }
             if (listBoxItems.SelectedIndex == -1)
             {
                 MessageBox.Show("Nie wybrano żadnego użytkownika");
             }
             else
             {
-                MessageBox.Show(Helper.GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].login);
+                // MessageBox.Show(Helper.GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].login);
+               
+                if (textBoxChat.Text != "")
+                {
+                    client.Send(textBoxChat.Text);
+                    textBoxChat.Text = "";
+
+                }
+
+
             }
         }
 
@@ -91,5 +127,29 @@ namespace Client
                     MessageBox.Show("Coś poszło nie tak");
             }
         }
+
+
+        private void callEndButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        public void startListening()
+        {
+            var server = new UdpListener(new IPEndPoint(IPAddress.Parse(GlobalMemory._user.ipAddress), 32123));
+
+        //start listening for messages and copy the messages back to the client
+        Task.Factory.StartNew(async() => {
+                while (true)
+                {
+                    var received = await server.Receive();
+                listView.Items.Add(received.Sender + ": " + received.Message);
+                    if (received.Message == "quit")
+                        break;
+                }
+                                    });
+
+        }
+
+
     }
 }
