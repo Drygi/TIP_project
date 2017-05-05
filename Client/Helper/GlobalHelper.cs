@@ -31,31 +31,27 @@ namespace Client.Helper
         public static string GetLocalIPAddress()
         {
             IPHostEntry host;
-            string localIP = "";
             host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (IPAddress ip in host.AddressList)
             {
-                if (ip.AddressFamily.ToString() == "InterNetwork")
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
                 {
-                    localIP = ip.ToString();
+                   return ip.ToString();
                 }
             }
-            return localIP;
+            return "";
         }
         public static bool messageBoxYesNO(string txt)
         {
-            bool answer = false;
             MessageBoxResult result = MessageBox.Show(txt,"", MessageBoxButton.YesNo);
                 switch(result)
                 {
                 case MessageBoxResult.Yes:
-                    answer = true;
-                        break;
+                    return true;
                 case MessageBoxResult.No:
-                    answer = false;
-                        break;
+                    return false;
                   }
-            return answer;
+            return false;
         }
 
         public static List<User> removeClientFromUsers(List<User>users,User user)
@@ -67,5 +63,16 @@ namespace Client.Helper
             }       
             return users;
         }
+
+        public static string getClientByIP(List<OnlineUser> users,string ip)
+        {
+            for (int i = 0; i < users.Count; i++)
+            {
+                if (users[i].ipAddress == ip)
+                    return users[i].login;
+            }
+            return "";
+        }
+
     }
 }

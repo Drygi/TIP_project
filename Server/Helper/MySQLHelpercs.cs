@@ -32,7 +32,7 @@ namespace Helper
 
                 var r = cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 returned = false;
             }
@@ -67,7 +67,7 @@ namespace Helper
                     returned = false;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 returned = false;
             }
@@ -102,7 +102,7 @@ namespace Helper
                 else returned = false;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 returned = false;
             }
@@ -127,7 +127,7 @@ namespace Helper
                 cmd.Parameters.AddWithValue("@online", true);
                 var r = cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 returned = false;
             }
@@ -153,7 +153,7 @@ namespace Helper
                 cmd.Parameters.AddWithValue("@login", login);
                 var r = cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 returned = false;
             }
@@ -186,7 +186,7 @@ namespace Helper
                 }
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 users = null;
             }
@@ -223,7 +223,7 @@ namespace Helper
                     returned = false;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 returned = false;
             }

@@ -27,7 +27,6 @@ namespace Client
             InitializeComponent();
             GlobalMemory.serverAddressIP = Microsoft.VisualBasic.Interaction.InputBox("Wpisz adres IP serwera!") + ":11885";
 
-            if()
             this.ShowsNavigationUI = false;
         }
         private async void Window_Closing(object sender, CancelEventArgs e)

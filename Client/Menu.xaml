@@ -28,17 +28,9 @@
         <StackPanel HorizontalAlignment="Center">
             <TextBlock x:Name="loginName" FontSize="30" Text="Zalogowano jako: " Margin="20,50,10,0" TextWrapping="Wrap" />
             <Button x:Name="callButton" Content="Zadzwoń" Height="30" HorizontalAlignment="Right" Margin="0,50,60,0" VerticalAlignment="Top" Width="150" Click="callButton_Click"  />
-            <ListView x:Name="listView" Height="100" Width="100">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
 
 
             <Button x:Name="callEndButton" Content="Zakończ rozmowę" Height="30" HorizontalAlignment="Right" Margin="0,200,60,0" VerticalAlignment="Top" Width="150" Click="callEndButton_Click"  />
-            <TextBox x:Name="textBoxChat" Height="23" TextWrapping="Wrap" Text="" Width="120"/>
 
         </StackPanel>
         <StackPanel HorizontalAlignment="Right">
