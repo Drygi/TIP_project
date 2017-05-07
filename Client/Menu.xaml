@@ -35,7 +35,6 @@
         </StackPanel>
         <StackPanel HorizontalAlignment="Right">
             <Button x:Name="LogoutButton" Content="Wyloguj się" Height="30" HorizontalAlignment="Right" Margin="0,50,50,50" VerticalAlignment="Top" Width="150" Click="LogoutButton_Click" />
-            <Button Content="Button" Width="74" Click="Button_Click"/>
             <Button x:Name="deleteButton" Content="Usuń konto" Height="30" HorizontalAlignment="Right" Margin="0,350,50,50" VerticalAlignment="Top" Width="150" Click="deleteButton_Click"  />
         </StackPanel>
 

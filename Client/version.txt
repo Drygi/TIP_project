@@ -8,3 +8,4 @@
 1.6 - dodanie komunikacji za pomocą UDP ale coś nie działa jak powinno 
 1.7 - poprawienie komunikacji za pomocą UDP, oraz dodanie komunikatów imitujących protokół SIP 
 1.8 - zakomentowanie komunikatów imitujących protokół SIP, zaimplementowanie rozmowy głosowej pomiędzy 2 userami
+1.8.1 - rozmowa wraz z komunikatami SIP 
