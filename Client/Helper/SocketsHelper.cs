@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -12,6 +14,11 @@ namespace Client.Helper
     {
         public IPEndPoint Sender;
         public string Message;
+    }
+    public struct ReceivedVoice
+    {
+        public IPEndPoint Sender;
+        public MemoryStream Message;
     }
 
     abstract public class UdpBase
@@ -30,6 +37,18 @@ namespace Client.Helper
             {
                 Message = Encoding.ASCII.GetString(result.Buffer, 0, result.Buffer.Length),
                 Sender = result.RemoteEndPoint
+            };
+        }
+        public async Task<ReceivedVoice> ReceiveVoice()
+        {
+            var result = await Client.ReceiveAsync();
+          
+            return new ReceivedVoice()
+            {
+
+                Message = new MemoryStream(result.Buffer),
+                Sender = result.RemoteEndPoint
+                
             };
         }
     }
@@ -66,6 +85,11 @@ namespace Client.Helper
         public void Send(string message)
         {
             var datagram = Encoding.ASCII.GetBytes(message);
+            Client.Send(datagram, datagram.Length);
+        }
+        public void SendBytes(byte[] datagram)
+        {
+          
             Client.Send(datagram, datagram.Length);
         }
 
