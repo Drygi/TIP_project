@@ -89,8 +89,8 @@ namespace Client.Helper
         }
         public void SendBytes(byte[] datagram)
         {
-          
-            Client.Send(datagram, datagram.Length);
+           // Client.Send()
+            Client.SendAsync(datagram, datagram.Length);
         }
 
     }

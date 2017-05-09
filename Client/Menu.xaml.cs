@@ -33,7 +33,6 @@ namespace Client
         private WaveIn waveSource;
         private WaveFileWriter waveFile;
         private WaveOut waveOut;
-
         public Menu()
         {
             InitializeComponent();
@@ -63,7 +62,6 @@ namespace Client
                 MessageBox.Show("Brak kontaków online");
             else
                 listBoxItems.ItemsSource = Helper.GlobalMemory.onlineUsers;
-
         }
         private void callButton_Click(object sender, RoutedEventArgs e)
         {
@@ -74,7 +72,7 @@ namespace Client
                 {
                     client = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, 32123);
                     client.Send("INVITE");
-                }
+            }
                 else
                     MessageBox.Show("Nie możesz prowadzić dwóch rozmów na raz, najpierw zakończ obecną rozmowę!");
         }
@@ -82,7 +80,6 @@ namespace Client
         {
             if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz usunąć swoje konto?"))
             {
-                
                 if (await APIHelper.deleteUser(GlobalMemory._user))
                 {
                     MessageBox.Show("Konto zostało usunięte pomyślnie");
@@ -105,10 +102,11 @@ namespace Client
             waveOut = new WaveOut();
             waveSource = new WaveIn();
             waveSource.WaveFormat = new WaveFormat(44100, 1);
+            waveSource.BufferMilliseconds = 100;
             waveSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
             waveSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
             waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
-
+         
             var server = new UdpListener(new IPEndPoint(IPAddress.Parse(GlobalMemory._user.ipAddress), 32123));
             Task.Factory.StartNew(async() => 
             {
@@ -116,12 +114,10 @@ namespace Client
                     {
                         var received = await server.Receive();
                         messageCase(received);
-                        
                         var receivedVoice = await server.ReceiveVoice();
                         playVoice(receivedVoice);     
                     }
             });
-
         }
         private void removeAcutalUserFromList(User user)
         {
@@ -133,10 +129,10 @@ namespace Client
         }
         private void playVoice(ReceivedVoice _receivedvoice)
         {
-            IWaveProvider provider = new RawSourceWaveStream(_receivedvoice.Message, new WaveFormat());
-            waveOut.Init(provider); 
-            waveOut.Play();
-        }
+          IWaveProvider provider = new RawSourceWaveStream(_receivedvoice.Message, new WaveFormat(44100, 1));
+           waveOut.Init(provider); 
+           waveOut.Play();
+        }    
         private void messageCase(Received _received)
         {
             string _message = _received.Message;
@@ -146,7 +142,6 @@ namespace Client
                 case "INVITE":
                 {
                         client = UdpUser.ConnectTo(_received.Sender.Address.ToString(), 32123);
-                     
                         if (GlobalHelper.messageBoxYesNO("Dzwoni " + _login + " czy chcesz odebrać?"))
                         {
                             client.Send("ACK");
@@ -180,17 +175,17 @@ namespace Client
                         client = null;
                     break;
                 }
-
                 default:
                     break;
             }
         }
-
        private void waveSource_DataAvailable(object sender, WaveInEventArgs e)
         {
-            if (waveFile != null)  
-                client.SendBytes(e.Buffer);
-        }
+            if (waveSource != null)
+            {
+               client.SendBytes(e.Buffer);
+            }
+        }      
         private void waveSource_RecordingStopped(object sender, StoppedEventArgs e)
         {
             if (waveSource != null)
@@ -204,6 +199,7 @@ namespace Client
                 waveFile = null;
             }
         }
+        
     }
 
 }
