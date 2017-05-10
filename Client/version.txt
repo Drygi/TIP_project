@@ -10,3 +10,4 @@
 1.8 - zakomentowanie komunikatów imitujących protokół SIP, zaimplementowanie rozmowy głosowej pomiędzy 2 userami
 1.8.1 - rozmowa wraz z komunikatami SIP 
 1.8.2 - poprawki podczas przesylania rozmowy 
+1.8.3 - przesyłanie romozwy i komunikatów na odrębnych portach 

@@ -29,10 +29,11 @@ namespace Client
     /// </summary>
     public partial class Menu : Page
     {
-        private UdpUser client;
+        private UdpUser clientMessage,clientVoice;
         private WaveIn waveSource;
         private WaveFileWriter waveFile;
         private WaveOut waveOut;
+        private int portMessage, portVoice;
         public Menu()
         {
             InitializeComponent();
@@ -68,10 +69,10 @@ namespace Client
             if (listBoxItems.SelectedIndex == -1)
                 MessageBox.Show("Nie wybrano żadnego użytkownika");
             else
-                if (client == null)
+                if (clientMessage == null )
                 {
-                    client = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, 32123);
-                    client.Send("INVITE");
+                    clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress,portMessage);
+                    clientMessage.Send("INVITE");
             }
                 else
                     MessageBox.Show("Nie możesz prowadzić dwóch rozmów na raz, najpierw zakończ obecną rozmowę!");
@@ -94,11 +95,13 @@ namespace Client
         private void callEndButton_Click(object sender, RoutedEventArgs e)
         {
             if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz zakończyć rozmowę?"))
-                client.Send("BYE");
+                clientMessage.Send("BYE");
         }
 
         private void initialize()
         {
+            portMessage = 32123;
+            portVoice = 32130;
             waveOut = new WaveOut();
             waveSource = new WaveIn();
             waveSource.WaveFormat = new WaveFormat(44100, 1);
@@ -107,16 +110,24 @@ namespace Client
             waveSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
             waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
          
-            var server = new UdpListener(new IPEndPoint(IPAddress.Parse(GlobalMemory._user.ipAddress), 32123));
+            var serverMessage = new UdpListener(new IPEndPoint(IPAddress.Parse(GlobalMemory._user.ipAddress), portMessage));
+            var serverVoice  = new UdpListener(new IPEndPoint(IPAddress.Parse(GlobalMemory._user.ipAddress), portVoice));
             Task.Factory.StartNew(async() => 
             {
                     while (true)
                     {
-                        var received = await server.Receive();
+                        var received = await serverMessage.Receive();
                         messageCase(received);
-                        var receivedVoice = await server.ReceiveVoice();
-                        playVoice(receivedVoice);     
+                        
                     }
+            });
+            Task.Factory.StartNew(async () =>
+            {
+                while (true)
+                {
+                    var receivedVoice = await serverVoice.ReceiveVoice();
+                    playVoice(receivedVoice);
+                }
             });
         }
         private void removeAcutalUserFromList(User user)
@@ -141,38 +152,43 @@ namespace Client
             {
                 case "INVITE":
                 {
-                        client = UdpUser.ConnectTo(_received.Sender.Address.ToString(), 32123);
+                        clientMessage = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portMessage);
                         if (GlobalHelper.messageBoxYesNO("Dzwoni " + _login + " czy chcesz odebrać?"))
                         {
-                            client.Send("ACK");
+                            clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
+                            clientMessage.Send("ACK");
+                            while (clientVoice == null);
                             waveSource.StartRecording();
                         }
                         else
                         {
-                            client.Send("CANCEL");
-                            client = null;
+                            clientMessage.Send("CANCEL");
+                            clientMessage = null;
                         }
                     break;
                 }
                 case "ACK":
                 {
                         // tutaj bedzie trzeba zrobić jakąs animacje ze rozmowa jest
+                        while (clientVoice == null);
                         waveSource.StartRecording();
                         MessageBox.Show("Połączenie zostało odebrane");
                     break;
                 }
                 case "BYE":
                 {
-                        client.Send("BYE");
+                        clientMessage.Send("BYE");
                         waveSource.StopRecording();
-                        client = null;
+                        Thread.Sleep(1000);
+                        clientVoice = null;
+                        clientMessage = null;
                         MessageBox.Show("Połączenie zostało zakończone");
                     break;
                 }
                 case "CANCEL":
                 {
                         MessageBox.Show("Połączenie zostało odrzucone");
-                        client = null;
+                        clientMessage = null;
                     break;
                 }
                 default:
@@ -183,7 +199,7 @@ namespace Client
         {
             if (waveSource != null)
             {
-               client.SendBytes(e.Buffer);
+               clientVoice.SendBytes(e.Buffer);
             }
         }      
         private void waveSource_RecordingStopped(object sender, StoppedEventArgs e)
