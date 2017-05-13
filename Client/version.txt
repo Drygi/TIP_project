@@ -11,3 +11,4 @@
 1.8.1 - rozmowa wraz z komunikatami SIP 
 1.8.2 - poprawki podczas przesylania rozmowy 
 1.8.3 - przesyłanie romozwy i komunikatów na odrębnych portach 
+1.8.4. - zdrobne zmiany 
