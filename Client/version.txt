@@ -12,3 +12,4 @@
 1.8.2 - poprawki podczas przesylania rozmowy 
 1.8.3 - przesyłanie romozwy i komunikatów na odrębnych portach 
 1.8.4. - zdrobne zmiany 
+1.8.5. - haslo nie może być krótsze niż 5 znaków, poprawa tranmisji dodanie kilku rozwiazan przetestować na 2 PC i wybrac najlepsze 

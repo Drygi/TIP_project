@@ -35,42 +35,58 @@ namespace Client
         {
             var s = new OnlineUser();
             if (login.Text.Length < 5)
+            {
                 MessageBox.Show("Podany login jest za krótki. Login musi mieć minimum 5 znaków!");
+                login.Text = "";
+                password.Password = "";
+                password2.Password = "";
+            }
             else
             {
-                s.login = login.Text;
-                s.ipAddress = " ";
-
-                if (await Helper.APIHelper.findLogin(s))
+                if (password.Password.Length <5 || password2.Password.Length <5)
                 {
-                    MessageBox.Show("Podany login już istnieje podaj inny!");
-                    login.Clear();
-                    password.Clear();
-                    password2.Clear();               
+                    MessageBox.Show("Hasło musi mieć minimum 5 znaków");
+                    login.Text = "";
+                    password.Password = "";
+                    password2.Password = "";
                 }
                 else
                 {
-                    if (password.Password.Trim() != password2.Password.Trim())
+
+                    s.login = login.Text;
+                    s.ipAddress = " ";
+
+                    if (await Helper.APIHelper.findLogin(s))
                     {
-                        MessageBox.Show("Podane hasła różnia się");
+                        MessageBox.Show("Podany login już istnieje podaj inny!");
+                        login.Clear();
                         password.Clear();
-                        password2.Clear();
+                        password2.Clear();               
                     }
                     else
                     {
-                        var user = new User(login.Text, Helper.GlobalHelper.getMD5(password.Password), Helper.GlobalHelper.GetLocalIPAddress(), false);
-                        if (!await Helper.APIHelper.register(user))
-                            MessageBox.Show("Wstawienie do bazy nie powiodło się");
+                        if (password.Password.Trim() != password2.Password.Trim())
+                        {
+                            MessageBox.Show("Podane hasła różnia się");
+                            password.Clear();
+                            password2.Clear();
+                        }
                         else
                         {
-                            MessageBox.Show("Pomyślnie dodano do bazy");
-                            Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
-                            this.NavigationService.Navigate(uri);
+                            var user = new User(login.Text, Helper.GlobalHelper.getMD5(password.Password), Helper.GlobalHelper.GetLocalIPAddress(), false);
+                            if (!await Helper.APIHelper.register(user))
+                                MessageBox.Show("Wstawienie do bazy nie powiodło się");
+                            else
+                            {
+                                MessageBox.Show("Pomyślnie dodano do bazy");
+                                Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
+                                this.NavigationService.Navigate(uri);
+                            }
                         }
                     }
-
-                 }
+                }
             }
+
         }
 
     }

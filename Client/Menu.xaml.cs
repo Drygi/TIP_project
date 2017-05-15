@@ -39,6 +39,9 @@ namespace Client
         private CancellationTokenSource serverVoiceCS;
         private CancellationToken ctMessage;
         private CancellationToken ctVoice;
+        //private WaveInProvider waveInProvider;
+
+
         public Menu()
         {
             InitializeComponent();
@@ -54,7 +57,7 @@ namespace Client
                 {
                     GlobalMemory._user = null;
                     Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
-                    waveFile.Close();
+                  
                     serverMessageCS.Cancel();
                     serverVoiceCS.Cancel();
                     this.NavigationService.Navigate(uri);
@@ -118,11 +121,16 @@ namespace Client
             portVoice = 32130;
             waveOut = new WaveOut();
             waveSource = new WaveIn();
-            waveSource.WaveFormat = new WaveFormat(44100, 1);
-            waveSource.BufferMilliseconds = 100;
+            waveSource.WaveFormat = new WaveFormat(44100, 2);
+            waveSource.BufferMilliseconds = 50;
             waveSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
             waveSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
-            waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
+            
+            //waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
+         
+          //WaveInProvider waveInProvider = new WaveInProvider(waveSource); 
+          
+
 
         }
         private void removeAcutalUserFromList(User user)
@@ -135,9 +143,10 @@ namespace Client
         }
         private void playVoice(ReceivedVoice _receivedvoice)
         {
-            IWaveProvider provider = new RawSourceWaveStream(_receivedvoice.Message, new WaveFormat(44100, 1));
+            IWaveProvider provider = new RawSourceWaveStream(_receivedvoice.Message, new WaveFormat(44100, 2));
             waveOut.Init(provider); 
             waveOut.Play();
+           
         }    
         private void messageCase(Received _received)
         {
@@ -163,7 +172,7 @@ namespace Client
                 }
                 case "ACK":
                 {
-                        clientMessage = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portMessage);
+                        //clientMessage = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portMessage);
                         clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
                         // tutaj bedzie trzeba zrobić jakąs animacje ze rozmowa jest
                       
@@ -177,6 +186,7 @@ namespace Client
                         {
                             clientMessage.Send("BYE");
                             waveSource.StopRecording();
+
                             clientVoice = null;
                             clientMessage = null;
                             MessageBox.Show("Połączenie zostało zakończone");
@@ -196,9 +206,17 @@ namespace Client
         }
        private void waveSource_DataAvailable(object sender, WaveInEventArgs e)
         {
+         //   waveInProvider = new WaveInProvider(waveSource); ;
             if (waveSource != null)
             {
-               clientVoice.SendBytes(e.Buffer);
+                clientVoice.SendBytes(e.Buffer);
+                
+              
+                // waveFile.Write(e.Buffer, 0, e.BytesRecorded);
+                //waveFile.Flush();
+
+                // waveInProvider.Read(e.Buffer, 0, e.BytesRecorded);
+
             }
         }      
         private void waveSource_RecordingStopped(object sender, StoppedEventArgs e)
