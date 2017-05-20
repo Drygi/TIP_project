@@ -58,6 +58,7 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -70,6 +71,7 @@
     <Compile Include="Helper\APIHelper.cs" />
     <Compile Include="Helper\GlobalHelper.cs" />
     <Compile Include="Helper\GlobalMemory.cs" />
+    <Compile Include="Helper\MySIP.cs" />
     <Compile Include="Helper\OnlineUser.cs" />
     <Compile Include="Helper\SocketsHelper.cs" />
     <Compile Include="LoginPage.xaml.cs">

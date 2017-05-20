@@ -12,7 +12,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
+using System.Windows.Automation.Peers;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -27,21 +30,15 @@ namespace Client
     /// <summary>
     /// Interaction logic for Menu.xaml
     /// </summary>
-    public partial class Menu : Page
+    public partial class Menu : Page 
     {
-        private UdpUser clientMessage,clientVoice;
+        private UdpUser clientMessage, clientVoice;
         private UdpListener serverMessage, serverVoice;
         private WaveIn waveSource;
         private WaveFileWriter waveFile;
         private WaveOut waveOut;
         private int portMessage, portVoice;
-        private CancellationTokenSource serverMessageCS;
-        private CancellationTokenSource serverVoiceCS;
-        private CancellationToken ctMessage;
-        private CancellationToken ctVoice;
-        //private WaveInProvider waveInProvider;
-
-
+        //  private WaveInProvider waveInProvider;
         public Menu()
         {
             InitializeComponent();
@@ -49,6 +46,7 @@ namespace Client
             initialize();
             startServerListening();
         }
+
         private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             if (GlobalHelper.messageBoxYesNO("Czy na pewno chcesz się wylogować?"))
@@ -57,9 +55,7 @@ namespace Client
                 {
                     GlobalMemory._user = null;
                     Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
-                  
-                    serverMessageCS.Cancel();
-                    serverVoiceCS.Cancel();
+                    waveFile = null;
                     this.NavigationService.Navigate(uri);
                 }
                 else
@@ -76,18 +72,18 @@ namespace Client
             else
                 listBoxItems.ItemsSource = Helper.GlobalMemory.onlineUsers;
         }
-        private void callButton_Click(object sender, RoutedEventArgs e)
+       private void callButton_Click(object sender, RoutedEventArgs e)
         {
             if (listBoxItems.SelectedIndex == -1)
                 MessageBox.Show("Nie wybrano żadnego użytkownika");
             else
-                if (clientMessage == null )
-                {
-                    clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress,portMessage);
-                    clientMessage.Send("INVITE");
+                if (clientMessage == null)
+            {
+                clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, portMessage);
+                clientMessage.Send(MySIP.INVITE);
             }
-                else
-                    MessageBox.Show("Nie możesz prowadzić dwóch rozmów na raz, najpierw zakończ obecną rozmowę!");
+            else
+                MessageBox.Show("Nie możesz prowadzić dwóch rozmów na raz, najpierw zakończ obecną rozmowę!");
         }
         private async void deleteButton_Click(object sender, RoutedEventArgs e)
         {
@@ -100,8 +96,6 @@ namespace Client
                     this.NavigationService.Navigate(uri);
                     GlobalMemory._user = null;
                     waveFile.Close();
-                    serverMessageCS.Cancel();
-                    serverVoiceCS.Cancel();
                 }
                 else
                     MessageBox.Show("Coś poszło nie tak");
@@ -110,28 +104,26 @@ namespace Client
         private void callEndButton_Click(object sender, RoutedEventArgs e)
         {
             if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz zakończyć rozmowę?"))
-                clientMessage.Send("BYE");
+                clientMessage.Send(MySIP.BYE);
         }
 
         private void initialize()
         {
-            serverMessageCS = new CancellationTokenSource();
-            serverVoiceCS = new CancellationTokenSource();
+            //wywolanie Clicka onlineUsers
+            ButtonAutomationPeer peer = new ButtonAutomationPeer(onlineUsers);
+            IInvokeProvider   invokeProv = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
+            invokeProv.Invoke();
             portMessage = 32123;
-            portVoice = 32130;
+            portVoice = 32120;
             waveOut = new WaveOut();
             waveSource = new WaveIn();
             waveSource.WaveFormat = new WaveFormat(44100, 2);
-            waveSource.BufferMilliseconds = 50;
+            waveSource.BufferMilliseconds = 100;
             waveSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
             waveSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
-            
-            //waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
-         
-          //WaveInProvider waveInProvider = new WaveInProvider(waveSource); 
-          
 
-
+            waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
+           // waveInProvider = new WaveInProvider(waveSource);
         }
         private void removeAcutalUserFromList(User user)
         {
@@ -144,81 +136,85 @@ namespace Client
         private void playVoice(ReceivedVoice _receivedvoice)
         {
             IWaveProvider provider = new RawSourceWaveStream(_receivedvoice.Message, new WaveFormat(44100, 2));
-            waveOut.Init(provider); 
+            waveOut.Init(provider);
             waveOut.Play();
-           
-        }    
+            provider = null;
+
+        }
         private void messageCase(Received _received)
         {
             string _message = _received.Message;
-            string _login  = GlobalHelper.getClientByIP(GlobalMemory.onlineUsers, _received.Sender.Address.ToString().Trim());
+            string _login = GlobalHelper.getClientByIP(GlobalMemory.onlineUsers, _received.Sender.Address.ToString().Trim());
             switch (_message)
             {
                 case "INVITE":
-                {
+                    {
                         clientMessage = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portMessage);
+                        
                         if (GlobalHelper.messageBoxYesNO("Dzwoni " + _login + " czy chcesz odebrać?"))
                         {
                             clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
-                            clientMessage.Send("ACK");
+                            clientMessage.Send(MySIP.ACK);
                             waveSource.StartRecording();
                         }
                         else
                         {
-                            clientMessage.Send("CANCEL");
+                            clientMessage.Send(MySIP.CANCEL);
                             clientMessage = null;
                         }
-                    break;
-                }
+                        break;
+                    }
                 case "ACK":
-                {
-                        //clientMessage = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portMessage);
+                    {
                         clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
+
                         // tutaj bedzie trzeba zrobić jakąs animacje ze rozmowa jest
-                      
-                        waveSource.StartRecording();
+                        
                         MessageBox.Show("Połączenie zostało odebrane");
-                    break;
-                }
+                        waveSource.StartRecording();
+                    //    timer.Start();
+                        break;
+                    }
                 case "BYE":
-                {
+                    {
                         if(clientMessage!=null)
                         {
-                            clientMessage.Send("BYE");
+                            clientMessage.Send(MySIP.BYE);
                             waveSource.StopRecording();
-
                             clientVoice = null;
                             clientMessage = null;
+
                             MessageBox.Show("Połączenie zostało zakończone");
-                            restartServerListening();
+                            waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
                         }
-                    break;
-                }
+                        break;
+                    }
                 case "CANCEL":
-                {
+                    {
                         MessageBox.Show("Połączenie zostało odrzucone");
                         clientMessage = null;
-                    break;
-                }
+                        break;
+                    }
                 default:
                     break;
             }
         }
-       private void waveSource_DataAvailable(object sender, WaveInEventArgs e)
+        private void waveSource_DataAvailable(object sender, WaveInEventArgs e)
         {
-         //   waveInProvider = new WaveInProvider(waveSource); ;
+            //   waveInProvider = new WaveInProvider(waveSource); ;
             if (waveSource != null)
             {
                 clientVoice.SendBytes(e.Buffer);
+
+                // waveFile.WriteAsync(e.Buffer, 0, e.BytesRecorded);
+                //waveFile.FlushAsync();
+                //  waveFile.Write(e.Buffer, 0, e.BytesRecorded);
+                waveFile.Flush();
                 
-              
-                // waveFile.Write(e.Buffer, 0, e.BytesRecorded);
-                //waveFile.Flush();
 
-                // waveInProvider.Read(e.Buffer, 0, e.BytesRecorded);
-
+                //   waveInProvider.Read(e.Buffer, 0, e.BytesRecorded);
             }
-        }      
+        }
         private void waveSource_RecordingStopped(object sender, StoppedEventArgs e)
         {
             if (waveSource != null)
@@ -234,42 +230,24 @@ namespace Client
         }
         private void startServerListening()
         {
-                serverVoice = new UdpListener(new IPEndPoint(IPAddress.Parse(GlobalMemory._user.ipAddress), portVoice));
-
-                ctVoice = serverVoiceCS.Token;
-                Task.Factory.StartNew(async () =>
+            serverVoice = new UdpListener(new IPEndPoint(IPAddress.Parse(GlobalMemory._user.ipAddress), portVoice));
+            Task.Factory.StartNew(async () =>
+            {
+                while (true)
                 {
-                    while (true)
-                    {
-                        var receivedVoice = await serverVoice.ReceiveVoice();
-                        playVoice(receivedVoice);
-
-                        if (ctVoice.IsCancellationRequested)
-                            break;
-                    }
-                }, ctVoice);
-
-                serverMessage = new UdpListener(new IPEndPoint(IPAddress.Parse(GlobalMemory._user.ipAddress), portMessage));
-                ctMessage = serverMessageCS.Token;
-                Task.Factory.StartNew(async () =>
+                    var receivedVoice = await serverVoice.ReceiveVoice();
+                    playVoice(receivedVoice);
+                }
+            });
+            serverMessage = new UdpListener(new IPEndPoint(IPAddress.Parse(GlobalMemory._user.ipAddress), portMessage));
+            Task.Factory.StartNew(async () =>
+            {
+                while (true)
                 {
-                    while (true)
-                    {
-                        var received = await serverMessage.Receive();
-                        messageCase(received);
-                        if (ctMessage.IsCancellationRequested)
-                            break;
-                    }
-                }, ctMessage);
+                    var received = await serverMessage.Receive();
+                    messageCase(received);
+                }
+            });
         }
-
-        private void restartServerListening()
-        {
-            serverMessageCS.Cancel();
-            serverVoiceCS.Cancel();
-            startServerListening();
-        }
-
-
     }
 }

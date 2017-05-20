@@ -45,10 +45,8 @@ namespace Client.Helper
           
             return new ReceivedVoice()
             {
-
                 Message = new MemoryStream(result.Buffer),
-                Sender = result.RemoteEndPoint
-                
+                Sender = result.RemoteEndPoint                
             };
         }
     }
@@ -59,8 +57,8 @@ namespace Client.Helper
         private IPEndPoint _listenOn;
 
         //public UdpListener() : this(new IPEndPoint(IPAddress.Any, 32123))
-        //{
-        //}
+          //{
+          //}
 
         public UdpListener(IPEndPoint endpoint)
         {
