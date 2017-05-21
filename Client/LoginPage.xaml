@@ -7,14 +7,22 @@
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
       Title="LoginPage"  Height="600" Width="800" Background="#3f3753"  >
-    <StackPanel>
+    <Grid>
+        <StackPanel>
+        
 
-        <TextBlock x:Name="pageText" FontSize="50" Margin="50"  Height="75"  Text="LOGOWANIE" TextAlignment="Center"/>
-        <TextBlock x:Name="loginText" Text="Wpisz login" FontSize="20" Width="200"/>
-        <TextBox x:Name="login" FontSize="20" Height="30" Width="200"/>
-        <TextBlock x:Name="passwordText" Text="Wpisz hasło" FontSize="20" Height="30" Width="200" />
-        <PasswordBox x:Name="password"  FontSize="20" Height="30" Width="200" Margin="300,0"/>
-        <Button x:Name="loginButton" Content="Zaloguj się" Width="200" Padding="10" Margin="20" Click="loginButton_Click" />
-        <TextBlock x:Name="registerClick" Text="Nie posiadam jeszcze konta" FontSize="15"  Width="200" Padding="10" Margin="60" MouseDown="registerClick_MouseDown" />
+            <TextBlock x:Name="pageText" FontSize="50" Margin="50"  Height="75"  Text="LOGOWANIE" TextAlignment="Center"/>
+            <TextBlock x:Name="loginText" Text="Wpisz login" FontSize="20" Width="200" Margin="230,12,0,0"/>
+            <TextBox x:Name="login" FontSize="20" Height="30" Width="200" Margin="230,0,0,0" />
+            <TextBlock x:Name="passwordText" Text="Wpisz hasło" FontSize="20" Height="30" Width="200" Margin="230,0,0,0"/>
+            <PasswordBox x:Name="password"  FontSize="20" Height="30" Width="200"  Margin="230,0,0,0"/>
+            <Button x:Name="loginButton" Content="Zaloguj się" Width="200" Padding="10" Margin="230,20,0,0" Click="loginButton_Click" />
+            <TextBlock x:Name="registerClick" Text="Nie posiadam jeszcze konta" Margin="230,50,0,0" FontSize="15"  Width="200" Padding="10" MouseDown="registerClick_MouseDown" />
+      
+        
     </StackPanel>
+        <Grid.Background>
+            <ImageBrush ImageSource="https://zapodaj.net/images/01c1976a99a30.png"/>
+        </Grid.Background>
+    </Grid>
 </Page>

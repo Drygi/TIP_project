@@ -7,20 +7,23 @@
       mc:Ignorable="d" 
        d:DesignHeight="300" d:DesignWidth="300"
       Title="RegisterPage"  Height="600" Width="800" Background="#3f3753"  >
-
+    <Grid>
     <StackPanel>
 
         <TextBlock x:Name="pageText" FontSize="50" Margin="50"  Height="75"  Text="REJESTRACJA" TextAlignment="Center"/>
-        <TextBlock x:Name="loginText" Text="Wpisz login" FontSize="20" Width="200"/>
-        <TextBox x:Name="login" FontSize="20" Height="30" Margin="300,0"/>
-        <TextBlock x:Name="passwordText" Text="Wpisz hasło" FontSize="20" Height="30" Width="200" />
-        <PasswordBox x:Name="password"  FontSize="20" Height="30" Margin="300,0"/>
-        <TextBlock x:Name="passwordText2" Text="Wpisz ponownie hasło" FontSize="20" Width="200"/>
-        <PasswordBox x:Name="password2"  FontSize="20" Height="30" Margin="300,0"/>
-        <Button x:Name="registerButton" Content="Zarejestruj się" Width="200" Padding="10" Margin="300,20" Click="registerButton_Click" />
-        <TextBlock x:Name="loginClick" VerticalAlignment="Center"  Text="Posiadam już konto" FontSize="15" Width="150" Padding="10" Margin="10" MouseDown="loginClick_MouseDown" />
+            <TextBlock x:Name="loginText" Text="Wpisz login" FontSize="20" Width="200" Margin="230,0,0,0"/>
+            <TextBox x:Name="login" FontSize="20" Height="30" Width="200" Margin="230,0,0,0"/>
+            <TextBlock x:Name="passwordText" Text="Wpisz hasło" FontSize="20" Height="30" Width="200" Margin="230,0,0,0"/>
+            <PasswordBox x:Name="password"  FontSize="20" Height="30" Width="200" Margin="230,0,0,0" />
+            <TextBlock x:Name="passwordText2" Text="Wpisz ponownie hasło" FontSize="20" Width="200" Margin="230,0,0,0"/>
+            <PasswordBox x:Name="password2"  FontSize="20" Height="30" Width="200" Margin="230,0,0,0"/>
+            <Button x:Name="registerButton" Content="Zarejestruj się" Width="200" Padding="10"  Margin="230,20,0,0" Click="registerButton_Click" />
+            <TextBlock x:Name="loginClick" VerticalAlignment="Center"  Text="Posiadam już konto" FontSize="15" Width="150" Padding="10" Margin="230,10,0,0" MouseDown="loginClick_MouseDown" />
 
 
     </StackPanel>
-
+        <Grid.Background>
+            <ImageBrush ImageSource="https://zapodaj.net/images/01c1976a99a30.png"/>
+        </Grid.Background>
+        </Grid>
 </Page>

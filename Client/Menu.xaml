@@ -8,40 +8,49 @@
       Height="600" Width="800" Background="#3f3753" 
       Title="Menu">
 
-    <DockPanel LastChildFill="True">
-        <StackPanel HorizontalAlignment="Left">
-            <TextBlock x:Name="showContact" Text="Kontakty online"  FontSize="30" Margin="10,50,10,0" />
+    <Grid>
 
-            <ListBox x:Name="listBoxItems" Background="#4d577a" HorizontalAlignment="Left" Height="350" Margin="10,10,0,10" VerticalAlignment="Top" Width="200"
+        <DockPanel LastChildFill="True">
+            <StackPanel HorizontalAlignment="Left">
+                <TextBlock x:Name="showContact" Text="Kontakty online"  FontSize="30" Margin="10,50,10,0" />
+
+                <ListBox x:Name="listBoxItems" Background="#dedede" HorizontalAlignment="Left" Height="350" Margin="10,10,0,10" VerticalAlignment="Top" Width="200"
                  ItemsSource="{Binding}">
-                <ListBox.ItemTemplate >
-                    <DataTemplate>
-                        <StackPanel  Orientation="Horizontal" >
-                            <TextBlock FontSize="30" Text="{Binding login}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <Button x:Name="onlineUsers" Content="Wyszukaj kontakty online" Width="200" Margin="0,20,0,0" Padding="10" Click="onlineUsers_Click"/>
+                    <ListBox.ItemTemplate >
+                        <DataTemplate>
+                            <StackPanel  Orientation="Horizontal" >
+                                <TextBlock FontSize="30" Text="{Binding login}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button x:Name="onlineUsers" Content="Wyszukaj kontakty online" Width="200" Margin="0,20,0,0" Padding="10" Click="onlineUsers_Click"/>
+                
+                <Button x:Name="deleteButton" Content="Usuń konto" Height="35" Margin="0,20,0,0" VerticalAlignment="Top" Width="200" Click="deleteButton_Click"  />
+                
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" Width="338">
+                <TextBlock x:Name="loginName" FontSize="30" Text="Zalogowano jako: " Margin="20,50,10,0" TextWrapping="Wrap" />
+                <Button x:Name="callButton" Content="Zadzwoń" Height="30" HorizontalAlignment="Right" Margin="0,142,0,0" VerticalAlignment="Top" Width="150" Click="callButton_Click"  />
+                <Button x:Name="callEndButton" Content="Zakończ rozmowę" Height="30" HorizontalAlignment="Right" Margin="0,-30,0,20" VerticalAlignment="Top" Width="150" Click="callEndButton_Click"  />
 
-        </StackPanel>
-        <StackPanel HorizontalAlignment="Center">
-            <TextBlock x:Name="loginName" FontSize="30" Text="Zalogowano jako: " Margin="20,50,10,0" TextWrapping="Wrap" />
-            <Button x:Name="callButton" Content="Zadzwoń" Height="30" HorizontalAlignment="Right" Margin="0,50,60,0" VerticalAlignment="Top" Width="150" Click="callButton_Click"  />
-
-
-            <Button x:Name="callEndButton" Content="Zakończ rozmowę" Height="30" HorizontalAlignment="Right" Margin="0,200,60,0" VerticalAlignment="Top" Width="150" Click="callEndButton_Click"  />
-
-        </StackPanel>
-        <StackPanel HorizontalAlignment="Right">
-            <Button x:Name="LogoutButton" Content="Wyloguj się" Height="30" HorizontalAlignment="Right" Margin="0,50,50,50" VerticalAlignment="Top" Width="150" Click="LogoutButton_Click" />
-            <Button x:Name="deleteButton" Content="Usuń konto" Height="30" HorizontalAlignment="Right" Margin="0,350,50,50" VerticalAlignment="Top" Width="150" Click="deleteButton_Click"  />
-        </StackPanel>
+            </StackPanel>
 
 
+            <StackPanel HorizontalAlignment="Right">
+                <Button x:Name="LogoutButton" Content="Wyloguj się" Height="30" HorizontalAlignment="Right" Margin="0,50,50,50" VerticalAlignment="Top" Width="150" Click="LogoutButton_Click" />
+              
+            </StackPanel>
 
 
 
 
-    </DockPanel>
+
+           
+        </DockPanel>
+        <Grid.Background>
+            <ImageBrush ImageSource="https://zapodaj.net/images/60bca4f046ffc.png"/>
+        </Grid.Background>
+    </Grid>
+    
 </Page>

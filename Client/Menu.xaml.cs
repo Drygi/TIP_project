@@ -81,12 +81,15 @@ namespace Client
             {
                 clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, portMessage);
                 clientMessage.Send(MySIP.INVITE);
+                callButton.Visibility = Visibility.Hidden;
+               
             }
             else
                 MessageBox.Show("Nie możesz prowadzić dwóch rozmów na raz, najpierw zakończ obecną rozmowę!");
         }
         private async void deleteButton_Click(object sender, RoutedEventArgs e)
         {
+
             if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz usunąć swoje konto?"))
             {
                 if (await APIHelper.deleteUser(GlobalMemory._user))
@@ -103,6 +106,8 @@ namespace Client
         }
         private void callEndButton_Click(object sender, RoutedEventArgs e)
         {
+            callEndButton.Visibility = Visibility.Hidden;
+            
             if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz zakończyć rozmowę?"))
                 clientMessage.Send(MySIP.BYE);
         }
