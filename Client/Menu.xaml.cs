@@ -38,6 +38,7 @@ namespace Client
         private WaveFileWriter waveFile;
         private WaveOut waveOut;
         private int portMessage, portVoice;
+        private bool isCall;
         //  private WaveInProvider waveInProvider;
         public Menu()
         {
@@ -74,18 +75,28 @@ namespace Client
         }
        private void callButton_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxItems.SelectedIndex == -1)
-                MessageBox.Show("Nie wybrano żadnego użytkownika");
-            else
-                if (clientMessage == null)
+            if(!isCall)
             {
-                clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, portMessage);
-                clientMessage.Send(MySIP.INVITE);
-                callButton.Visibility = Visibility.Hidden;
-               
+                if (listBoxItems.SelectedIndex == -1)
+                    MessageBox.Show("Nie wybrano żadnego użytkownika");
+                else
+                    if (clientMessage == null)
+                    {
+                        clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, portMessage);
+                        clientMessage.Send(MySIP.INVITE);
+                      //  callButton.Visibility = Visibility.Hidden;
+                    }
             }
             else
-                MessageBox.Show("Nie możesz prowadzić dwóch rozmów na raz, najpierw zakończ obecną rozmowę!");
+            {
+                if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz zakończyć rozmowę?"))
+                { 
+                    clientMessage.Send(MySIP.BYE);
+                    isCall = false;
+                    callButton.Content = "Zadzwoń";
+                
+                }
+            }
         }
         private async void deleteButton_Click(object sender, RoutedEventArgs e)
         {
@@ -104,20 +115,14 @@ namespace Client
                     MessageBox.Show("Coś poszło nie tak");
             }
         }
-        private void callEndButton_Click(object sender, RoutedEventArgs e)
-        {
-            callEndButton.Visibility = Visibility.Hidden;
-            
-            if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz zakończyć rozmowę?"))
-                clientMessage.Send(MySIP.BYE);
-        }
-
+       
         private void initialize()
         {
             //wywolanie Clicka onlineUsers
             ButtonAutomationPeer peer = new ButtonAutomationPeer(onlineUsers);
             IInvokeProvider   invokeProv = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
             invokeProv.Invoke();
+            isCall = false;
             portMessage = 32123;
             portVoice = 32120;
             waveOut = new WaveOut();
@@ -161,6 +166,8 @@ namespace Client
                             clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
                             clientMessage.Send(MySIP.ACK);
                             waveSource.StartRecording();
+                            isCall = true;
+                            callButton.Content = "Zakończ rozmowę";
                         }
                         else
                         {
@@ -177,7 +184,9 @@ namespace Client
                         
                         MessageBox.Show("Połączenie zostało odebrane");
                         waveSource.StartRecording();
-                    //    timer.Start();
+                        isCall = true;
+                        callButton.Content = "Zakończ rozmowę";
+                        //    timer.Start();
                         break;
                     }
                 case "BYE":
@@ -191,6 +200,8 @@ namespace Client
 
                             MessageBox.Show("Połączenie zostało zakończone");
                             waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
+                            isCall = false;
+                            callButton.Content = "Zadzwoń";
                         }
                         break;
                     }

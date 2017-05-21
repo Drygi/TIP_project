@@ -32,7 +32,6 @@
             <StackPanel HorizontalAlignment="Center" Width="338">
                 <TextBlock x:Name="loginName" FontSize="30" Text="Zalogowano jako: " Margin="20,50,10,0" TextWrapping="Wrap" />
                 <Button x:Name="callButton" Content="Zadzwoń" Height="30" HorizontalAlignment="Right" Margin="0,142,0,0" VerticalAlignment="Top" Width="150" Click="callButton_Click"  />
-                <Button x:Name="callEndButton" Content="Zakończ rozmowę" Height="30" HorizontalAlignment="Right" Margin="0,-30,0,20" VerticalAlignment="Top" Width="150" Click="callEndButton_Click"  />
 
             </StackPanel>
 

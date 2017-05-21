@@ -14,3 +14,5 @@
 1.8.4. - zdrobne zmiany 
 1.8.5. - haslo nie może być krótsze niż 5 znaków, poprawa tranmisji dodanie kilku rozwiazan przetestować na 2 PC i wybrac najlepsze 
 1.9 - dodanie klasy MySIP imitującej ten protokół, odświeżenie kontaków od razu po zalogowaniu 
+2.0 - zmiana całego wyglądu aplikacji
+2.1 - 1 button od konczenia i rozpoczynania rozmowy, stały rozmiar okna 
