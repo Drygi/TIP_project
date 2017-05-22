@@ -9,7 +9,13 @@
       Title="Menu">
 
     <Grid>
-
+        <Button Height="30" Width="30" HorizontalAlignment="Right" Margin="0,50,20,50" VerticalAlignment="Top"  >
+            <StackPanel>
+                <Image Source="https://zapodaj.net/images/63db100ab64c4.png" />
+                <TextBlock>Buttttooon</TextBlock>
+                
+            </StackPanel>
+        </Button>
         <DockPanel LastChildFill="True">
             <StackPanel HorizontalAlignment="Left">
                 <TextBlock x:Name="showContact" Text="Kontakty online"  FontSize="30" Margin="10,50,10,0" />
@@ -31,15 +37,15 @@
             </StackPanel>
             <StackPanel HorizontalAlignment="Center" Width="338">
                 <TextBlock x:Name="loginName" FontSize="30" Text="Witaj " Margin="20,50,10,0" TextWrapping="Wrap" />
-                <Button x:Name="callButton" Content="Zadzwoń" ContentStringFormat="true" Height="30" HorizontalAlignment="Right" Margin="0,142,0,0" VerticalAlignment="Top" Width="150" Click="callButton_Click"  />
-                <Button x:Name="callEndButton" Content="Zakończ" ContentStringFormat="true" Height="30" HorizontalAlignment="Right" Margin="0,142,0,0" VerticalAlignment="Top" Width="150" Click="callEndButton_Click"  />
+                <Button x:Name="callButton"  Content="Zadzwoń" ContentStringFormat="true" Height="30" HorizontalAlignment="Right" Margin="0,142,0,0" VerticalAlignment="Top" Width="150" Click="callButton_Click"  />
+                <Button x:Name="callEndButton" Content="Zakończ" ContentStringFormat="true" Height="30" HorizontalAlignment="Right" Margin="0,-30,0,0" VerticalAlignment="Top" Width="150" Click="callEndButton_Click"  />
 
             </StackPanel>
 
 
             <StackPanel HorizontalAlignment="Right">
-                <Button x:Name="LogoutButton" Content="Wyloguj się" Height="30" HorizontalAlignment="Right" Margin="0,50,50,50" VerticalAlignment="Top" Width="150" Click="LogoutButton_Click" />
-                <Button x:Name="exitButton" Content="Wyjście" Height="30" HorizontalAlignment="Right" Margin="0,50,50,50" VerticalAlignment="Top" Width="150"  Click="exitButton_Click"/>
+                <Button x:Name="LogoutButton" Content="Wyloguj się" Height="30" HorizontalAlignment="Right" Margin="0,50,60,50" VerticalAlignment="Top" Width="150" Click="LogoutButton_Click" />
+             <!--   <Button x:Name="exitButton" Content="Wyjście" Height="30" HorizontalAlignment="Right" Margin="0,50,50,50" VerticalAlignment="Top" Width="150"  Click="exitButton_Click" /> -->
 
             </StackPanel>
 

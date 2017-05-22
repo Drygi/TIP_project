@@ -46,6 +46,7 @@ namespace Client
             initialize();
             loginName.Text += GlobalMemory._user.login;
             startServerListening();
+            callEndButton.Visibility = Visibility.Hidden;
         }
 
         private async void LogoutButton_Click(object sender, RoutedEventArgs e)
@@ -79,6 +80,8 @@ namespace Client
             else
                 if (clientMessage == null)
                 {
+                    callButton.Visibility = Visibility.Hidden;
+                    callEndButton.Visibility = Visibility.Visible;
                     clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, portMessage);
                     clientMessage.Send(MySIP.INVITE);
                 }

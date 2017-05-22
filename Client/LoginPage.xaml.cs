@@ -42,6 +42,8 @@ namespace Client
                 Helper.GlobalMemory._user = user;
                 Uri uri = new Uri("Menu.xaml", UriKind.Relative);
                 this.NavigationService.Navigate(uri);
+                
+                
             }
             else
             {

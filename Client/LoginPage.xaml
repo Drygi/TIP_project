@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Client"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
-      Title="LoginPage"  Height="600" Width="800" Background="#3f3753"  >
+      Title="LoginPage"  Height="600" Width="800" Background="#ffffff"  >
     <Grid>
         <StackPanel>
         
