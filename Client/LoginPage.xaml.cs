@@ -29,27 +29,12 @@ namespace Client
         public LoginPage()
         {
             InitializeComponent();
-            initialize();
+            user = new User();
         }
 
-        private void initialize()
-        {
-            if (!File.Exists("file.txt"))
-                File.WriteAllText("file.txt", "");
-
-            if (File.ReadAllText("file.txt") != "")
-            {
-                GlobalMemory._user = GlobalHelper.jsonToUser(File.ReadAllText("file.txt"));
-                Uri uri = new Uri("Menu.xaml", UriKind.Relative);
-                this.NavigationService.Navigate(uri);
-            }
-            else
-                user = new User();
-
-        }
         private async void loginButton_Click(object sender, RoutedEventArgs e)
         {
-            User user = new User(login.Text, Helper.GlobalHelper.getMD5(password.Password), 
+                User user = new User(login.Text, Helper.GlobalHelper.getMD5(password.Password), 
                 Helper.GlobalHelper.GetLocalIPAddress(), true);
 
             if (await Helper.APIHelper.login(user))
@@ -69,11 +54,13 @@ namespace Client
 
         private void registerClick_MouseDown(object sender, MouseButtonEventArgs e)
         {
-      
             Uri uri = new Uri("RegisterPage.xaml", UriKind.Relative);
-            this.NavigationService.Navigate(uri);
-            
+            this.NavigationService.Navigate(uri);   
         }
-    
+
+        private void exitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }

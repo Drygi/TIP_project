@@ -39,7 +39,6 @@ namespace Client
         private WaveFileWriter waveFile;
         private WaveOut waveOut;
         private int portMessage, portVoice;
-        private bool isCall;
         //  private WaveInProvider waveInProvider;
         public Menu()
         {
@@ -55,11 +54,7 @@ namespace Client
             {
                 if (await APIHelper.logout(Helper.GlobalMemory._user))
                 {
-                    GlobalMemory._user = null;
-               //     Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
-                    waveFile = null;
                     File.WriteAllText("file.txt", "");
-                   // this.NavigationService.Navigate(uri);
                     System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                     Application.Current.Shutdown();
                 }
@@ -78,31 +73,41 @@ namespace Client
                 listBoxItems.ItemsSource = Helper.GlobalMemory.onlineUsers;
         }
        private void callButton_Click(object sender, RoutedEventArgs e)
+       {
+            if (listBoxItems.SelectedIndex == -1)
+                MessageBox.Show("Nie wybrano żadnego użytkownika");
+            else
+                if (clientMessage == null)
+                {
+                    clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, portMessage);
+                    clientMessage.Send(MySIP.INVITE);
+                }
+       }
+        private async void exitButton_Click(object sender, RoutedEventArgs e)
         {
-            if(!isCall)
+            if (await Helper.APIHelper.logout(Helper.GlobalMemory._user))
             {
-                if (listBoxItems.SelectedIndex == -1)
-                    MessageBox.Show("Nie wybrano żadnego użytkownika");
-                else
-                    if (clientMessage == null)
-                    {
-                        clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, portMessage);
-                        clientMessage.Send(MySIP.INVITE);
-                      //  callButton.Visibility = Visibility.Hidden;
-                    }
+                File.WriteAllText("file.txt", "");
+                Application.Current.Shutdown();
             }
             else
+                MessageBox.Show("Zamknięcie nie powiodło się");
+
+        }
+
+        private void callEndButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (clientVoice != null)
             {
                 if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz zakończyć rozmowę?"))
-                { 
+                {
                     clientMessage.Send(MySIP.BYE);
-                    isCall = false;
-                    callButton.Content = "Zadzwoń";
                     System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                     Application.Current.Shutdown();
-
                 }
             }
+            else
+                MessageBox.Show("Nie prowadzisz obecnie żadnej rozmowy");
         }
         private async void deleteButton_Click(object sender, RoutedEventArgs e)
         {
@@ -112,10 +117,6 @@ namespace Client
                 if (await APIHelper.deleteUser(GlobalMemory._user))
                 {
                     MessageBox.Show("Konto zostało usunięte pomyślnie");
-                   // Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
-                    //this.NavigationService.Navigate(uri);
-                    GlobalMemory._user = null;
-                    waveFile.Close();
                     File.WriteAllText("file.txt","");
                     System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                     Application.Current.Shutdown();
@@ -131,7 +132,6 @@ namespace Client
             ButtonAutomationPeer peer = new ButtonAutomationPeer(onlineUsers);
             IInvokeProvider   invokeProv = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
             invokeProv.Invoke();
-            isCall = false;
             portMessage = 32123;
             portVoice = 32120;
             waveOut = new WaveOut();
@@ -169,65 +169,50 @@ namespace Client
         {
             string _message = _received.Message;
             string _login = GlobalHelper.getClientByIP(GlobalMemory.onlineUsers, _received.Sender.Address.ToString().Trim());
+
             switch (_message)
             {
                 case "INVITE":
                     {
-                        clientMessage = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portMessage);
+                            clientMessage = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portMessage);
                         
-                        if (GlobalHelper.messageBoxYesNO("Dzwoni " + _login + " czy chcesz odebrać?"))
-                        {
-                            clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
-                            clientMessage.Send(MySIP.ACK);
-                            waveSource.StartRecording();
-                            isCall = true;
-                            callButton.Content = "Zakończ rozmowę";
-                        }
-                        else
-                        {
-                            clientMessage.Send(MySIP.CANCEL);
-                            clientMessage = null;
-                            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                            Application.Current.Shutdown();
-                        }
+                            if (GlobalHelper.messageBoxYesNO("Dzwoni " + _login + " czy chcesz odebrać?"))
+                            {
+                                clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
+                                clientMessage.Send(MySIP.ACK);
+                           
+                              //  callButton.Visibility = Visibility.Hidden;
+                                waveSource.StartRecording();
+                            }
+                            else
+                            {
+                                clientMessage.Send(MySIP.CANCEL);        
+                                System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                                Application.Current.Shutdown();
+                            }
                         break;
                     }
                 case "ACK":
                     {
-                        clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
+                            clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
+                           // callButton.Visibility = Visibility.Hidden;
 
-                        // tutaj bedzie trzeba zrobić jakąs animacje ze rozmowa jest
-                        
-                        MessageBox.Show("Połączenie zostało odebrane");
-                        waveSource.StartRecording();
-                        isCall = true;
-                        callButton.Content = "Zakończ rozmowę";
-                        //    timer.Start();
+                            waveSource.StartRecording();
+                            MessageBox.Show("Połączenie zostało odebrane");
                         break;
                     }
                 case "BYE":
                     {
-                        if(clientMessage!=null)
-                        {
-                            clientMessage.Send(MySIP.BYE);
-                            waveSource.StopRecording();
-                            clientVoice = null;
-                            clientMessage = null;
-
+                            //waveSource.StopRecording();
                             MessageBox.Show("Połączenie zostało zakończone");
-                            waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
-                            isCall = false;
-                            callButton.Content = "Zadzwoń";
                             System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                            Application.Current.Shutdown();
-                        }
+                            Application.Current.Shutdown(); 
                         break;
                     }
                 case "CANCEL":
                     {
-                        MessageBox.Show("Połączenie zostało odrzucone");
-                        clientMessage = null;
-                          System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                            MessageBox.Show("Połączenie zostało odrzucone");
+                            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                             Application.Current.Shutdown();
                         break;
                     }

@@ -17,3 +17,4 @@
 2.0 - zmiana całego wyglądu aplikacji
 2.1 - 1 button od konczenia i rozpoczynania rozmowy, stały rozmiar okna 
 2.1.1 - restart aplikacjci bo zakonczeniu rozmowy, troche janusz no ale...
+2.2 - dodanie buttonow wyjscie 

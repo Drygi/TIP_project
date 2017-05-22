@@ -26,19 +26,29 @@ namespace Client
         public MainWindow()
         {
             InitializeComponent();
-            GlobalMemory.serverAddressIP = "10.160.34.89:11885";
+            init();
 
+        }
+
+
+        private void init()
+        {
+            GlobalMemory.serverAddressIP = "192.168.1.4:11885";
+            if (File.ReadAllText("file.txt") != "")
+            {
+                GlobalMemory._user = GlobalHelper.jsonToUser(File.ReadAllText("file.txt"));
+                Uri uri = new Uri("Menu.xaml", UriKind.RelativeOrAbsolute);
+                this.NavigationService.Navigate(uri);
+            }
             this.ShowsNavigationUI = false;
         }
-        private async void Window_Closing(object sender, CancelEventArgs e)
-        {
-            File.WriteAllText("file.txt", "");
-            if (Helper.GlobalMemory._user != null)
-            {
-                await Helper.APIHelper.logout(Helper.GlobalMemory._user);
-            }
-        }
-        }
 
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            e.Cancel = true;
+
+        }
     }
+
+}
 
