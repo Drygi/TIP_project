@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Client.Helper;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -27,10 +29,24 @@ namespace Client
         public LoginPage()
         {
             InitializeComponent();
-            user = new User();
-          
+            initialize();
         }
 
+        private void initialize()
+        {
+            if (!File.Exists("file.txt"))
+                File.WriteAllText("file.txt", "");
+
+            if (File.ReadAllText("file.txt") != "")
+            {
+                GlobalMemory._user = GlobalHelper.jsonToUser(File.ReadAllText("file.txt"));
+                Uri uri = new Uri("Menu.xaml", UriKind.Relative);
+                this.NavigationService.Navigate(uri);
+            }
+            else
+                user = new User();
+
+        }
         private async void loginButton_Click(object sender, RoutedEventArgs e)
         {
             User user = new User(login.Text, Helper.GlobalHelper.getMD5(password.Password), 

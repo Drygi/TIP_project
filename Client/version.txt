@@ -16,3 +16,4 @@
 1.9 - dodanie klasy MySIP imitującej ten protokół, odświeżenie kontaków od razu po zalogowaniu 
 2.0 - zmiana całego wyglądu aplikacji
 2.1 - 1 button od konczenia i rozpoczynania rozmowy, stały rozmiar okna 
+2.1.1 - restart aplikacjci bo zakonczeniu rozmowy, troche janusz no ale...

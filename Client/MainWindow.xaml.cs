@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,15 +26,19 @@ namespace Client
         public MainWindow()
         {
             InitializeComponent();
-            GlobalMemory.serverAddressIP = "192.168.1.4:11885";
+            GlobalMemory.serverAddressIP = "10.160.34.89:11885";
 
             this.ShowsNavigationUI = false;
         }
         private async void Window_Closing(object sender, CancelEventArgs e)
         {
+            File.WriteAllText("file.txt", "");
             if (Helper.GlobalMemory._user != null)
+            {
                 await Helper.APIHelper.logout(Helper.GlobalMemory._user);
+            }
+        }
         }
 
     }
-}
+

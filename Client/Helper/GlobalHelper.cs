@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -72,6 +73,16 @@ namespace Client.Helper
                     return users[i].login;
             }
             return "";
+        }
+
+        public static string userToJson(User user)
+        {
+            return JsonConvert.SerializeObject(user);
+        }
+
+        public static User jsonToUser(string json)
+        {
+            return JsonConvert.DeserializeObject<User>(json);
         }
     }
 }

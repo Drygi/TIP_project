@@ -1,4 +1,5 @@
 ﻿using Client.Helper;
+using Client.Properties;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using System;
@@ -43,8 +44,8 @@ namespace Client
         public Menu()
         {
             InitializeComponent();
-            loginName.Text += GlobalMemory._user.login;
             initialize();
+            loginName.Text += GlobalMemory._user.login;
             startServerListening();
         }
 
@@ -55,9 +56,12 @@ namespace Client
                 if (await APIHelper.logout(Helper.GlobalMemory._user))
                 {
                     GlobalMemory._user = null;
-                    Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
+               //     Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
                     waveFile = null;
-                    this.NavigationService.Navigate(uri);
+                    File.WriteAllText("file.txt", "");
+                   // this.NavigationService.Navigate(uri);
+                    System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                    Application.Current.Shutdown();
                 }
                 else
                     MessageBox.Show("Coś poszło nie tak");
@@ -94,7 +98,9 @@ namespace Client
                     clientMessage.Send(MySIP.BYE);
                     isCall = false;
                     callButton.Content = "Zadzwoń";
-                
+                    System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                    Application.Current.Shutdown();
+
                 }
             }
         }
@@ -106,10 +112,13 @@ namespace Client
                 if (await APIHelper.deleteUser(GlobalMemory._user))
                 {
                     MessageBox.Show("Konto zostało usunięte pomyślnie");
-                    Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
-                    this.NavigationService.Navigate(uri);
+                   // Uri uri = new Uri("LoginPage.xaml", UriKind.Relative);
+                    //this.NavigationService.Navigate(uri);
                     GlobalMemory._user = null;
                     waveFile.Close();
+                    File.WriteAllText("file.txt","");
+                    System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                    Application.Current.Shutdown();
                 }
                 else
                     MessageBox.Show("Coś poszło nie tak");
@@ -131,6 +140,11 @@ namespace Client
             waveSource.BufferMilliseconds = 100;
             waveSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
             waveSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
+
+            if (File.ReadAllText("file.txt")=="")
+                File.WriteAllText("file.txt", GlobalHelper.userToJson(GlobalMemory._user));
+            
+
 
             waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
            // waveInProvider = new WaveInProvider(waveSource);
@@ -173,6 +187,8 @@ namespace Client
                         {
                             clientMessage.Send(MySIP.CANCEL);
                             clientMessage = null;
+                            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                            Application.Current.Shutdown();
                         }
                         break;
                     }
@@ -202,6 +218,8 @@ namespace Client
                             waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
                             isCall = false;
                             callButton.Content = "Zadzwoń";
+                            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                            Application.Current.Shutdown();
                         }
                         break;
                     }
@@ -209,6 +227,8 @@ namespace Client
                     {
                         MessageBox.Show("Połączenie zostało odrzucone");
                         clientMessage = null;
+                          System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                            Application.Current.Shutdown();
                         break;
                     }
                 default:
