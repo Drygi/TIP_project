@@ -44,9 +44,8 @@ namespace Client
         {
             InitializeComponent();
             initialize();
-            loginName.Text += GlobalMemory._user.login;
             startServerListening();
-            callEndButton.Visibility = Visibility.Hidden;
+       
         }
 
         private async void LogoutButton_Click(object sender, RoutedEventArgs e)
@@ -131,6 +130,8 @@ namespace Client
        
         private void initialize()
         {
+            loginName.Text += GlobalMemory._user.login;
+            callEndButton.Visibility = Visibility.Hidden;
             //wywolanie Clicka onlineUsers
             ButtonAutomationPeer peer = new ButtonAutomationPeer(onlineUsers);
             IInvokeProvider   invokeProv = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;

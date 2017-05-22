@@ -33,7 +33,7 @@ namespace Client
 
         private void init()
         {
-            GlobalMemory.serverAddressIP = "192.168.0.102:11885";
+            GlobalMemory.serverAddressIP = "10.11.15.111:11885";
             if (File.ReadAllText("file.txt") != "")
             {
                 GlobalMemory._user = GlobalHelper.jsonToUser(File.ReadAllText("file.txt"));

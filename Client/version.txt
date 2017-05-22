@@ -20,3 +20,4 @@
 2.2 - dodanie buttonow wyjscie 
 2.3 - poprawiony front, zamiana buttona wyjścia, zamienne buttony zadzwoń -> zakończ
 2.4 - poprawione buttony
+2.4.1 poprawiona obsluga buttonow

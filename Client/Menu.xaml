@@ -9,7 +9,7 @@
       Title="Menu">
 
     <Grid>
-        <Button Height="30" Width="30" HorizontalAlignment="Right" Margin="0,50,20,50" VerticalAlignment="Top"  >
+        <Button Height="30" Width="30" HorizontalAlignment="Right" Margin="0,50,20,50" VerticalAlignment="Top" Click="exitButton_Click" >
             <StackPanel>
                 <Image Source="https://zapodaj.net/images/63db100ab64c4.png" />
                 <TextBlock>Buttttooon</TextBlock>
@@ -45,7 +45,7 @@
 
             <StackPanel HorizontalAlignment="Right">
                 <Button x:Name="LogoutButton" Content="Wyloguj się" Height="30" HorizontalAlignment="Right" Margin="0,50,60,50" VerticalAlignment="Top" Width="150" Click="LogoutButton_Click" />
-             <!--   <Button x:Name="exitButton" Content="Wyjście" Height="30" HorizontalAlignment="Right" Margin="0,50,50,50" VerticalAlignment="Top" Width="150"  Click="exitButton_Click" /> -->
+            
 
             </StackPanel>
 
