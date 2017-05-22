@@ -8,7 +8,14 @@
        d:DesignHeight="300" d:DesignWidth="300"
       Title="RegisterPage"  Height="600" Width="800" Background="#3f3753"  >
     <Grid>
-    <StackPanel>
+        <Button Height="30" Width="30" HorizontalAlignment="Right" Margin="0,50,20,50" VerticalAlignment="Top"  >
+            <StackPanel>
+                <Image Source="https://zapodaj.net/images/63db100ab64c4.png" />
+                <TextBlock>Buttttooon</TextBlock>
+
+            </StackPanel>
+        </Button>
+        <StackPanel>
 
         <TextBlock x:Name="pageText" FontSize="50" Margin="50"  Height="75"  Text="REJESTRACJA" TextAlignment="Center"/>
             <TextBlock x:Name="loginText" Text="Wpisz login" FontSize="20" Width="200" Margin="230,0,0,0"/>

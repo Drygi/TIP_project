@@ -19,3 +19,4 @@
 2.1.1 - restart aplikacjci bo zakonczeniu rozmowy, troche janusz no ale...
 2.2 - dodanie buttonow wyjscie 
 2.3 - poprawiony front, zamiana buttona wyjścia, zamienne buttony zadzwoń -> zakończ
+2.4 - poprawione buttony
