@@ -8,7 +8,7 @@
        d:DesignHeight="300" d:DesignWidth="300"
       Title="RegisterPage"  Height="600" Width="800" Background="#3f3753"  >
     <Grid>
-        <Button Height="30" Width="30" HorizontalAlignment="Right" Margin="0,50,20,50" VerticalAlignment="Top"  >
+        <Button x:Name="exitButton" Height="30" Width="30" HorizontalAlignment="Right" Margin="0,50,20,50" VerticalAlignment="Top" Click="exitButton_Click" >
             <StackPanel>
                 <Image Source="https://zapodaj.net/images/63db100ab64c4.png" />
                 <TextBlock>Buttttooon</TextBlock>

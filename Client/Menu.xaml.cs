@@ -39,6 +39,8 @@ namespace Client
         private WaveFileWriter waveFile;
         private WaveOut waveOut;
         private int portMessage, portVoice;
+        private bool isCall;
+        private Thread finish;
         //  private WaveInProvider waveInProvider;
         public Menu()
         {
@@ -74,42 +76,41 @@ namespace Client
         }
        private void callButton_Click(object sender, RoutedEventArgs e)
        {
-            if (listBoxItems.SelectedIndex == -1)
-                MessageBox.Show("Nie wybrano żadnego użytkownika");
+
+            if (!isCall)
+            {
+                if (listBoxItems.SelectedIndex == -1)
+                    MessageBox.Show("Nie wybrano żadnego użytkownika");
+                else
+                    if (clientMessage == null)
+                    {
+                        clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, portMessage);
+                        clientMessage.Send(MySIP.INVITE);
+                    }
+            }
             else
-                if (clientMessage == null)
+            {
+                if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz zakończyć rozmowę?"))
                 {
-                    callButton.Visibility = Visibility.Hidden;
-                    callEndButton.Visibility = Visibility.Visible;
-                    clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, portMessage);
-                    clientMessage.Send(MySIP.INVITE);
+                    clientMessage.Send(MySIP.BYE);
+                    waveSource.StopRecording();
+                    System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                    finish.Start();
+
+
                 }
-       }
+            }
+        }
         private async void exitButton_Click(object sender, RoutedEventArgs e)
         {
             if (await Helper.APIHelper.logout(Helper.GlobalMemory._user))
             {
                 File.WriteAllText("file.txt", "");
-                Application.Current.Shutdown();
+                finish.Start();
             }
             else
                 MessageBox.Show("Zamknięcie nie powiodło się");
 
-        }
-
-        private void callEndButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (clientVoice != null)
-            {
-                if (Helper.GlobalHelper.messageBoxYesNO("Czy na pewno chcesz zakończyć rozmowę?"))
-                {
-                    clientMessage.Send(MySIP.BYE);
-                    System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                    Application.Current.Shutdown();
-                }
-            }
-            else
-                MessageBox.Show("Nie prowadzisz obecnie żadnej rozmowy");
         }
         private async void deleteButton_Click(object sender, RoutedEventArgs e)
         {
@@ -121,7 +122,7 @@ namespace Client
                     MessageBox.Show("Konto zostało usunięte pomyślnie");
                     File.WriteAllText("file.txt","");
                     System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                    Application.Current.Shutdown();
+                    finish.Start();
                 }
                 else
                     MessageBox.Show("Coś poszło nie tak");
@@ -130,8 +131,8 @@ namespace Client
        
         private void initialize()
         {
+            isCall = false;
             loginName.Text += GlobalMemory._user.login;
-            callEndButton.Visibility = Visibility.Hidden;
             //wywolanie Clicka onlineUsers
             ButtonAutomationPeer peer = new ButtonAutomationPeer(onlineUsers);
             IInvokeProvider   invokeProv = peer.GetPattern(PatternInterface.Invoke) as IInvokeProvider;
@@ -184,40 +185,39 @@ namespace Client
                             {
                                 clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
                                 clientMessage.Send(MySIP.ACK);
-                           
-                              //  callButton.Visibility = Visibility.Hidden;
                                 waveSource.StartRecording();
+                                isCall = true;  
                             }
                             else
                             {
-                                clientMessage.Send(MySIP.CANCEL);        
+                                clientMessage.Send(MySIP.CANCEL);
                                 System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                                Application.Current.Shutdown();
+                                finish.Start();
                             }
                         break;
                     }
                 case "ACK":
                     {
                             clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
-                           // callButton.Visibility = Visibility.Hidden;
-
                             waveSource.StartRecording();
                             MessageBox.Show("Połączenie zostało odebrane");
+                            isCall = true;
                         break;
                     }
                 case "BYE":
                     {
-                            //waveSource.StopRecording();
+                            waveSource.StopRecording();
                             MessageBox.Show("Połączenie zostało zakończone");
                             System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                            Application.Current.Shutdown(); 
+                            finish.Start();
+
                         break;
                     }
                 case "CANCEL":
                     {
                             MessageBox.Show("Połączenie zostało odrzucone");
                             System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                            Application.Current.Shutdown();
+                            finish.Start();
                         break;
                     }
                 default:
@@ -273,6 +273,15 @@ namespace Client
                     messageCase(received);
                 }
             });
+            ThreadStart ts = delegate ()
+            {
+                Dispatcher.BeginInvoke((Action)delegate ()
+                {
+                    Application.Current.Shutdown();
+                });
+            };
+            finish = new Thread(ts);
+
         }
     }
 }

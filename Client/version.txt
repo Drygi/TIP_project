@@ -21,3 +21,4 @@
 2.3 - poprawiony front, zamiana buttona wyjścia, zamienne buttony zadzwoń -> zakończ
 2.4 - poprawione buttony
 2.4.1 poprawiona obsluga buttonow
+2.4.2 - poprawienie działania aplikacji podczas rozmowy (zakoczenie, odrzucenie itp)

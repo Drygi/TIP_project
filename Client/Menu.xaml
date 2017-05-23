@@ -13,7 +13,7 @@
             <StackPanel>
                 <Image Source="https://zapodaj.net/images/63db100ab64c4.png" />
                 <TextBlock>Buttttooon</TextBlock>
-                
+
             </StackPanel>
         </Button>
         <DockPanel LastChildFill="True">
@@ -31,21 +31,21 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
                 <Button x:Name="onlineUsers" Content="Wyszukaj kontakty online" Width="200" Margin="0,20,0,0" Padding="10" Click="onlineUsers_Click"/>
-                
+
                 <Button x:Name="deleteButton" Content="Usuń konto" Height="35" Margin="0,20,0,0" VerticalAlignment="Top" Width="200" Click="deleteButton_Click"  />
-                
+
             </StackPanel>
             <StackPanel HorizontalAlignment="Center" Width="338">
                 <TextBlock x:Name="loginName" FontSize="30" Text="Witaj " Margin="20,50,10,0" TextWrapping="Wrap" />
-                <Button x:Name="callButton"  Content="Zadzwoń" ContentStringFormat="true" Height="30" HorizontalAlignment="Right" Margin="0,142,0,0" VerticalAlignment="Top" Width="150" Click="callButton_Click"  />
-                <Button x:Name="callEndButton" Content="Zakończ" ContentStringFormat="true" Height="30" HorizontalAlignment="Right" Margin="0,-30,0,0" VerticalAlignment="Top" Width="150" Click="callEndButton_Click"  />
+                <Button x:Name="callButton"  Content="Zadzwoń / Zakończ" Visibility="Visible" Height="30" HorizontalAlignment="Right" Margin="0,142,0,0" VerticalAlignment="Top" Width="150" Click="callButton_Click"  />
+               <!-- <Button x:Name="callEndButton" Content="Zakończ" IsEnabled="False" Visibility="Visible" Height="30" HorizontalAlignment="Right" Margin="0,20,0,0" VerticalAlignment="Top" Width="150" Click="callEndButton_Click"  /> -->
 
             </StackPanel>
 
 
             <StackPanel HorizontalAlignment="Right">
                 <Button x:Name="LogoutButton" Content="Wyloguj się" Height="30" HorizontalAlignment="Right" Margin="0,50,60,50" VerticalAlignment="Top" Width="150" Click="LogoutButton_Click" />
-            
+
 
             </StackPanel>
 
@@ -53,11 +53,11 @@
 
 
 
-           
+
         </DockPanel>
         <Grid.Background>
             <ImageBrush ImageSource="https://zapodaj.net/images/60bca4f046ffc.png"/>
         </Grid.Background>
     </Grid>
-    
+
 </Page>
