@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Client"
         Closing="Window_Closing"    
         mc:Ignorable="d"
-        Title="Chit Chat" MinHeight="630" MaxHeight="630" MinWidth="800" MaxWidth="800" Background="#e4b5a0" Source="LoginPage.xaml" >
+        Title="Chit Chat" MinHeight="630" MaxHeight="630" MinWidth="800" MaxWidth="800" Background="#e4b5a0" Source="LoginPage.xaml" ResizeMode="NoResize" >
         
 </NavigationWindow >
     

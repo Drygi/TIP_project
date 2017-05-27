@@ -74,8 +74,8 @@ namespace Client
             else
                 listBoxItems.ItemsSource = Helper.GlobalMemory.onlineUsers;
         }
-       private void callButton_Click(object sender, RoutedEventArgs e)
-       {
+        private async void callButton_Click(object sender, RoutedEventArgs e)
+        {
 
             if (!isCall)
             {
@@ -84,8 +84,17 @@ namespace Client
                 else
                     if (clientMessage == null)
                     {
-                        clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, portMessage);
-                        clientMessage.Send(MySIP.INVITE);
+                        if (!await APIHelper.isOnline(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex]))
+                        {
+                            MessageBox.Show("Wybrany użytkownik nie jest online!");
+                            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                            finish.Start();
+                        }
+                        else
+                        {
+                            clientMessage = UdpUser.ConnectTo(GlobalMemory.onlineUsers[listBoxItems.SelectedIndex].ipAddress, portMessage);
+                            clientMessage.Send(MySIP.INVITE);
+                        }
                     }
             }
             else
@@ -96,8 +105,6 @@ namespace Client
                     waveSource.StopRecording();
                     System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                     finish.Start();
-
-
                 }
             }
         }
@@ -110,7 +117,6 @@ namespace Client
             }
             else
                 MessageBox.Show("Zamknięcie nie powiodło się");
-
         }
         private async void deleteButton_Click(object sender, RoutedEventArgs e)
         {
@@ -128,7 +134,6 @@ namespace Client
                     MessageBox.Show("Coś poszło nie tak");
             }
         }
-       
         private void initialize()
         {
             isCall = false;
@@ -149,8 +154,6 @@ namespace Client
             if (File.ReadAllText("file.txt")=="")
                 File.WriteAllText("file.txt", GlobalHelper.userToJson(GlobalMemory._user));
             
-
-
             waveFile = new WaveFileWriter("call.wav", waveSource.WaveFormat);
            // waveInProvider = new WaveInProvider(waveSource);
         }

@@ -81,6 +81,41 @@ namespace Helper
             return returned;
         }
 
+        public static bool findOnline(string login, MySqlConnection conn)
+        {
+            bool returned = true;
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM users WHERE login=@log AND online=@online", conn);
+
+                cmd.Parameters.AddWithValue("@log", login);
+                cmd.Parameters.AddWithValue("@online", true);
+
+                var result = cmd.ExecuteReader();
+
+                if (result.HasRows)
+                {
+                    returned = true;
+                }
+                else
+                    returned = false;
+
+            }
+            catch (Exception)
+            {
+                returned = false;
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return returned;
+        }
+
         //sprawdzanie poprawności danych 
         public static bool checkCorrectAccount(string login, string password, MySqlConnection conn)
         {

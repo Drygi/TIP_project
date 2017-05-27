@@ -112,5 +112,23 @@ namespace Client.Helper
                     return false;
             }
         }
+
+        public static async Task<bool> isOnline(OnlineUser user)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://" + GlobalMemory.serverAddressIP);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                StringContent content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+                // HTTP POST
+                HttpResponseMessage response = await client.PostAsync("api/isOnline", content);
+                if (response.IsSuccessStatusCode)
+                    return true;
+                else
+                    return false;
+            }
+        }
+
     }
 }

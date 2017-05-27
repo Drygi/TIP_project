@@ -49,6 +49,16 @@ namespace Server.Controllers
             else
                 return Unauthorized();
         }
+        //GET api/isOnline
+        [Route("isOnline")]
+        [AllowAnonymous]
+        public IHttpActionResult isOnline(OnlineUser user)
+        {
+            if (MySQLHelper.findOnline(user.login, connection))
+                return Ok();
+            else
+                return Unauthorized();
+        }
 
         // GET api/users
         [Route("users")]

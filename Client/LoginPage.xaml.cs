@@ -25,33 +25,38 @@ namespace Client
     /// </summary>
     public partial class LoginPage : Page
     {
-        private User user;
         public LoginPage()
         {
             InitializeComponent();
-            user = new User();
         }
 
         private async void loginButton_Click(object sender, RoutedEventArgs e)
         {
-                User user = new User(login.Text, Helper.GlobalHelper.getMD5(password.Password), 
-                Helper.GlobalHelper.GetLocalIPAddress(), true);
 
-            if (await Helper.APIHelper.login(user))
+            if (login.Text.Trim().Length<5 || password.Password.Trim().Length<5)
             {
-                Helper.GlobalMemory._user = user;
-                Uri uri = new Uri("Menu.xaml", UriKind.Relative);
-                this.NavigationService.Navigate(uri);
-                
-                
+                MessageBox.Show("Podany login lub hasło jest za krótkie! Minimum 5 znaków!");
+                login.Text = "";
+                password.Password = "";
             }
             else
             {
-                MessageBox.Show("Bląd podczas logowania");
-                login.Clear();
-                password.Clear();
-            }
+                User user = new User(login.Text, Helper.GlobalHelper.getMD5(password.Password), 
+                Helper.GlobalHelper.GetLocalIPAddress(), true);
 
+                if (await Helper.APIHelper.login(user))
+                {
+                    Helper.GlobalMemory._user = user;
+                    Uri uri = new Uri("Menu.xaml", UriKind.Relative);
+                    this.NavigationService.Navigate(uri);
+                }
+                else
+                {
+                    MessageBox.Show("Bląd podczas logowania");
+                    login.Clear();
+                    password.Clear();
+                }
+            }
         }
 
         private void registerClick_MouseDown(object sender, MouseButtonEventArgs e)
