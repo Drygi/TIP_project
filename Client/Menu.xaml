@@ -37,8 +37,8 @@
             </StackPanel>
             <StackPanel HorizontalAlignment="Center" Width="338">
                 <TextBlock x:Name="loginName" FontSize="30" Text="Witaj " Margin="20,50,10,0" TextWrapping="Wrap" />
+                <TextBlock x:Name="callName" Text="Paula jak to ustawisz to to usun (tekst) z xaml" Margin="20,20,20,20"  />
                 <Button x:Name="callButton"  Content="Zadzwoń / Zakończ" Visibility="Visible" Height="30" HorizontalAlignment="Right" Margin="0,142,0,0" VerticalAlignment="Top" Width="150" Click="callButton_Click"  />
-               <!-- <Button x:Name="callEndButton" Content="Zakończ" IsEnabled="False" Visibility="Visible" Height="30" HorizontalAlignment="Right" Margin="0,20,0,0" VerticalAlignment="Top" Width="150" Click="callEndButton_Click"  /> -->
 
             </StackPanel>
 
