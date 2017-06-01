@@ -189,8 +189,12 @@ namespace Client
                                 clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
                                 clientMessage.Send(MySIP.ACK);
                                 waveSource.StartRecording();
-                                callName.Text = "Aktualnie rozmawiasz z " + _login;
-                                isCall = true;  
+
+                                Application.Current.Dispatcher.Invoke(new Action(() => 
+                                {
+                                    callName.Text = "Aktualnie rozmawiasz z"+ _login;
+                                }));
+                            isCall = true;  
                             }
                             else
                             {
@@ -204,7 +208,10 @@ namespace Client
                     {
                             clientVoice = UdpUser.ConnectTo(_received.Sender.Address.ToString(), portVoice);
                             waveSource.StartRecording();
-                            callName.Text = "Aktualnie rozmawiasz z " + _login;
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                callName.Text = "Aktualnie rozmawiasz z" + _login;
+                            }));
                             MessageBox.Show("Połączenie zostało odebrane");
                             isCall = true;
                         break;

@@ -24,3 +24,4 @@
 2.4.2 - poprawienie działania aplikacji podczas rozmowy (zakoczenie, odrzucenie itp)
 2.5 - dodanie w API get'a findOnline sprawdzajacej czy dany user jest Online, oraz sprawdzanie dlugosci loginu i hasla podczas logowania + update bazy 
 2.6 - dodanie komunikatu z kim aktualnie rozmawiasz
+2.6.1 - poprawienie błedu 
